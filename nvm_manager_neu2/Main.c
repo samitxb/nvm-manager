@@ -14,8 +14,10 @@ int main() {
 	initqueue();
 	NVM_Init();
 
+
 	//Neuer Record
 	int id = NVM_AddNewRecord(5, 0, 0);
+	/*int id2 = NVM_AddNewRecord(5, 0, 0);*/
 
 
 
