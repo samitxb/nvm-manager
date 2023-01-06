@@ -11,13 +11,24 @@
 int main() {
 
 	//Init NVM MANAGER
-	initqueue();
-	NVM_Init();
 
+	// Verwaltungsblock für NVM Records
+	NVMRecordManager nvm_alloctable[ALLOC_TABLE_SIZE];
+
+	// NVM-Speicher
+	unsigned char nvm_data[NVM_SIZE];
+
+
+	NVM_Init(&nvm_alloctable, nvm_data);
+
+
+
+	NVMRecord record1;
+	unsigned char data[] = { 1, 2, 3, 4, 5 };
 
 	//Neuer Record
-	int id = NVM_AddNewRecord(5, 0, 0);
-	/*int id2 = NVM_AddNewRecord(5, 0, 0);*/
+	int id = NVM_AddNewRecord(&nvm_alloctable, &record1, nvm_data, 5, 0, 0);
+	
 
 
 

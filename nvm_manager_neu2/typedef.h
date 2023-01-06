@@ -9,19 +9,21 @@
 #define NVM_HEADER_SIZE 4
 #define ALLOC_TABLE_SIZE 100
 
-//#define NVM_BLOCK_SIZE 16
-//#define NVM_NUM_BLOCKS (NVM_SIZE / NVM_BLOCK_SIZE)
-//#define NVM_NUM_RECORDS 64
-
-#define NVM_QUEUE_SIZE 100
 
 
+
+// Struktur für den Header eines NVM-Records
 typedef struct {
-	int id;
-	unsigned char* data; 
+    int id; // ID des Records
+    int length; // Länge des Records
+} NVMRecordHeader;
 
-}NVM_QueueEntry;
-
+// Struktur für einen NVM-Record
+typedef struct {
+    NVMRecordHeader header; // Header des Records
+    bool checksum; // Checksumme des Records
+    unsigned char data[];
+} NVMRecord;
 
 // Struktur für die Verwaltung von NVM Records
 typedef struct {
@@ -33,10 +35,13 @@ typedef struct {
     bool redundant; // Flag, ob der Record redundant gespeichert wird
     bool redundancy_start; // Startposition des Redundanzblocks
     bool valid; // Flag, ob der Record valide ist
-} NVMRecord;
+    bool checksum;
+} NVMRecordManager;
 
 // Verwaltungsblock für NVM Records
-NVMRecord nvm_records[NVM_SIZE];
+NVMRecordManager nvm_alloctable[ALLOC_TABLE_SIZE];
 
 // NVM-Speicher
 unsigned char nvm_data[NVM_SIZE];
+
+

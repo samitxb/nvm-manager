@@ -1,4 +1,4 @@
 #pragma once
+#include "typedef.h"
 
-void initqueue();
-void NVM_Init();
+void NVM_Init(NVMRecordManager* nvm_alloctable, unsigned char nvm_data[]);

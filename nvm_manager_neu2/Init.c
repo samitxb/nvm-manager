@@ -1,13 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <stdbool.h>
 
 #include "typedef.h"
 
 
-
-void initqueue() {
+/*void initqueue() {
 	NVM_QueueEntry nvm_write_queue[NVM_QUEUE_SIZE];
 	int nvm_write_queue_start = 0;
 	int nvm_write_queue_end = 0;
@@ -15,10 +14,20 @@ void initqueue() {
 	NVM_QueueEntry nvm_read_queue[NVM_QUEUE_SIZE];
 	int nvm_read_queue_start = 0;
 	int nvm_read_queue_end = 0;
-}
+}*/
+
+/**/
 
 // Initialisierung des NVM Managers
-void NVM_Init() {
-	memset(nvm_records, 0, sizeof(nvm_records));
+void NVM_Init(NVMRecordManager* nvm_alloctable, unsigned char nvm_data[]) {
+	memset(nvm_alloctable, 0, sizeof(nvm_alloctable));
 	memset(nvm_data, 0xff, sizeof(nvm_data));
 }
+
+
+/*// Initialisiert den NVM-Manager
+int NVM_Init(NVMManager* manager) {
+	memset(manager, 0, sizeof(NVMManager));
+
+	return 0;
+}*/

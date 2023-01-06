@@ -1,3 +1,5 @@
 #pragma once
 
-int NVM_AddNewRecord(int length, int readonly, int redundant);
+#include "typedef.h"
+
+int NVM_AddNewRecord(NVMRecordManager* nvm_alloctable, NVMRecord* record, unsigned char nvm_data[], int length, bool readonly, bool redundant);
