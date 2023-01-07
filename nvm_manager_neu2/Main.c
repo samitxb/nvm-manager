@@ -9,25 +9,24 @@
 
 
 int main() {
-
-	//Init NVM MANAGER
-
-	// Verwaltungsblock für NVM Records
-	NVMRecordManager nvm_alloctable[ALLOC_TABLE_SIZE];
-
-	// NVM-Speicher
-	unsigned char nvm_data[NVM_SIZE];
-
-
-	NVM_Init(&nvm_alloctable, nvm_data);
-
-
-
-	NVMRecord record1;
-	unsigned char data[] = { 1, 2, 3, 4, 5 };
+	// Initialisiere NVM Manager
+	NVMManager manager;
+	NVM_Init(&manager);
 
 	//Neuer Record
-	int id = NVM_AddNewRecord(&nvm_alloctable, &record1, nvm_data, 5, 0, 0);
+	/*	NVMRecord record1;
+	unsigned char data1[6] = { 1, 2, 3, 4, 5, 6 };
+	memcpy(record1.data, data1, sizeof(data1)); //wird dann komischer weise 2x geschrieben
+	printf("Size of Record Data %d\n", sizeof(data1));
+	printf("Size of Record Data %zd\n", record1.data);*/
+
+	NVMRecord record;
+	unsigned char data[] = { 1, 2, 3, 4, 5, 6, 7 };
+	record.header.id = 0;
+	record.header.length = sizeof(data);
+
+	// To ADDRecord
+	int id = NVM_AddNewRecord(&manager, &record, 0 , 0);
 	
 
 

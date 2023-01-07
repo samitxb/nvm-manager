@@ -16,18 +16,18 @@
 	int nvm_read_queue_end = 0;
 }*/
 
-/**/
-
-// Initialisierung des NVM Managers
+/*// Initialisierung des NVM Managers
 void NVM_Init(NVMRecordManager* nvm_alloctable, unsigned char nvm_data[]) {
 	memset(nvm_alloctable, 0, sizeof(nvm_alloctable));
 	memset(nvm_data, 0xff, sizeof(nvm_data));
-}
+}*/
 
 
-/*// Initialisiert den NVM-Manager
+
+
+// Initialisiert den NVM-Manager
 int NVM_Init(NVMManager* manager) {
 	memset(manager, 0, sizeof(NVMManager));
 
 	return 0;
-}*/
+}

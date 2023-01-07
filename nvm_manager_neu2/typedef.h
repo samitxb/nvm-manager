@@ -33,15 +33,14 @@ typedef struct {
     bool used; // Flag, ob der Record genutzt wird
     bool readonly; // Flag, ob der Record schreibgeschützt ist
     bool redundant; // Flag, ob der Record redundant gespeichert wird
-    bool redundancy_start; // Startposition des Redundanzblocks
+    int redundancy_start; // Startposition des Redundanzblocks
     bool valid; // Flag, ob der Record valide ist
     bool checksum;
-} NVMRecordManager;
-
-// Verwaltungsblock für NVM Records
-NVMRecordManager nvm_alloctable[ALLOC_TABLE_SIZE];
-
-// NVM-Speicher
-unsigned char nvm_data[NVM_SIZE];
+} NVMRecordInfo;
 
 
+// Struktur für den NVM-Manager
+typedef struct {
+    NVMRecordInfo allocTable[ALLOC_TABLE_SIZE]; // Allokationstabelle
+    unsigned char nvm_data[NVM_SIZE]; // NVM-Speicher
+} NVMManager;
