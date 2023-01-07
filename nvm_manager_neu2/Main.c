@@ -25,8 +25,12 @@ int main() {
 	record.header.id = 0;
 	record.header.length = sizeof(data);
 
-	// To ADDRecord
+	//memcpy(record.data, data, sizeof(data));  // Wird iwie 2mal in den Record geschrieben. Ka wieso.
+
+	// To ADDRecord manger record & readonly & redundant
 	int id = NVM_AddNewRecord(&manager, &record, 0 , 0);
+
+
 	
 
 
