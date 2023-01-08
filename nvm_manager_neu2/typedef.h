@@ -9,9 +9,6 @@
 #define NVM_HEADER_SIZE 4
 #define ALLOC_TABLE_SIZE 100
 
-
-
-
 // Struktur für den Header eines NVM-Records
 typedef struct {
     int id; // ID des Records
@@ -21,7 +18,7 @@ typedef struct {
 // Struktur für einen NVM-Record
 typedef struct {
     NVMRecordHeader header; // Header des Records
-    bool checksum; // Checksumme des Records
+    unsigned char checksum; // Checksumme des Records
     unsigned char data[];
 } NVMRecord;
 
@@ -35,7 +32,7 @@ typedef struct {
     bool redundant; // Flag, ob der Record redundant gespeichert wird
     int redundancy_start; // Startposition des Redundanzblocks
     bool valid; // Flag, ob der Record valide ist
-    bool checksum;
+    unsigned char checksum;
 } NVMRecordInfo;
 
 

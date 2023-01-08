@@ -130,11 +130,13 @@
     <ClCompile Include="Init.c" />
     <ClCompile Include="Main.c" />
     <ClCompile Include="nvm_add.c" />
+    <ClCompile Include="nvm_del.c" />
     <ClCompile Include="nvm_syncrw.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Init.h" />
     <ClInclude Include="nvm_add.h" />
+    <ClInclude Include="nvm_del.h" />
     <ClInclude Include="nvm_syncrw.h" />
     <ClInclude Include="typedef.h" />
   </ItemGroup>
