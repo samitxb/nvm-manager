@@ -15,8 +15,8 @@ unsigned char calc_lrc(unsigned char* data, int data_size) {
     return lrc;
 }
 
-//Schreibe Record
 
+/*
 int NVM_SyncWriteRecord(NVMManager* manager, int id, NVMRecord* record) {
 
     NVMRecordInfo* info = &manager->allocTable[id];
@@ -55,7 +55,7 @@ int NVM_SyncWriteRecord(NVMManager* manager, int id, NVMRecord* record) {
 
     return 0;
 }
-
+*/
 
 
 // Synchrones Schreiben eines Records
@@ -68,25 +68,19 @@ void NVM_SyncWriteRecord2(NVMManager* manager, int id, unsigned char* data) {
         return;
     }
 
-    /*
-    // Berechne das LRC über die Daten
-    unsigned char lrc = 0;
-    for (int i = 0; i < info->length; i++) {
-        lrc ^= data[i];
-    }*/
-
     // Berechne Checksumme
     int lrc = calc_lrc(data, info->length);
     printf("CHecksum Write2= %d\n", lrc);
 
     // Schreibe den Record im NVM-Speicher
     int start = info->start;
-    manager->nvm_data[start] = id;
-    manager->nvm_data[start + 1] = info->length;
+    //manager->nvm_data[start] = id;
+    //manager->nvm_data[start + 1] = info->length;
     for (int i = 0; i < info->length; i++) {
-        manager->nvm_data[start + NVM_HEADER_SIZE + i] = data[i];
+        manager->nvm_data[start /*+ NVM_HEADER_SIZE*/  + i] = data[i];
     }
-    manager->nvm_data[start + NVM_HEADER_SIZE + info->length] = lrc;
+    //manager->nvm_data[start /*+ NVM_HEADER_SIZE*/ + info->length] = lrc;
+
 
     // Wenn der Record redundant gespeichert werden soll, speichere ihn noch einmal hintereinander ab
     if (info->redundant) {
@@ -137,26 +131,6 @@ void NVM_SyncWriteRecord(int id, unsigned char* data) {
 */
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*
 char calculateLRC(unsigned char* data) {
     int length = sizeof(&data) / sizeof(&data[0]);
@@ -174,7 +148,6 @@ char calculateLRC(unsigned char* data) {
     return lrc;
 }
 */
-
 
 
 /*// Berechnet die Checksumme eines Records (LRC)
