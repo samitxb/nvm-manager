@@ -34,17 +34,16 @@ void NVM_SyncWriteRecord2(NVMManager* manager, int id, unsigned char* data) {
     for (int i = 0; i < info->length; i++) {
         manager->nvm_data[start + i] = data[i];
     }
-    //manager->nvm_data[start + info->length] = lrc;
 
     // Wenn der Record redundant gespeichert werden soll, speichere ihn noch einmal hintereinander ab
     if (info->redundant) {
-        start = info->start + info->length + NVM_HEADER_SIZE + 1;
+        start = info->start + info->length + 1;
         manager->nvm_data[start] = id;
         manager->nvm_data[start + 1] = info->length;
         for (int i = 0; i < info->length; i++) {
-            manager->nvm_data[start + NVM_HEADER_SIZE + i] = data[i];
+            manager->nvm_data[start + i] = data[i];
         }
-        manager->nvm_data[start + NVM_HEADER_SIZE + info->length] = lrc;
+        manager->nvm_data[start + info->length] = lrc;
     }
 
     // Setze das Redundanzstart-Flag und das Validitätsflag

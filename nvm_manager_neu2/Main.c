@@ -51,8 +51,6 @@ int main() {
 	for (int i = 0; i < sizeof(data2); i++) {
 		printf("%d\n", record2.data[i]);
 	}
-	
-
 
 	// Lösche Record
 	NVM_DeleteRecord(&manager, id1);
