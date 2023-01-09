@@ -66,10 +66,10 @@ int NVM_AddNewRecord(NVMManager* manager, NVMRecord* record, bool readonly, bool
 
 
     //Setzt Speicherbereich auf FF (reservierung?) sollte eigentlich nicht implementiert werden
-    /*
+    
     for (int i = start; i < start + length; i++) {
         manager->nvm_data[i] = 0xff;
-    }*/
+    }
     //memcpy(&manager->nvm_data[info->start], record, info->length);
 
     return id;

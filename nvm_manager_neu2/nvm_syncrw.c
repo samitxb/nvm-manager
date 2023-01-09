@@ -96,6 +96,7 @@ void NVM_SyncWriteRecord2(NVMManager* manager, int id, unsigned char* data) {
     // Setze das Redundanzstart-Flag und das Validitätsflag
     info->redundancy_start = start;
     info->valid = 1;
+    info->checksum = lrc;
 }
 
 
