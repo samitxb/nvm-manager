@@ -36,8 +36,8 @@ int main() {
 	int id2 = NVM_AddNewRecord(&manager, &record2, 0, 0);
 
 	//Schreibe Record
-	NVM_SyncWriteRecord2(&manager, id1, data1);
-	NVM_SyncWriteRecord2(&manager, id2, data2);
+	NVM_SyncWriteRecord(&manager, id1, data1);
+	NVM_SyncWriteRecord(&manager, id2, data2);
 
 	//Read Record
 	NVM_SyncReadRecord(&manager, id1, data1, &record1);
@@ -58,7 +58,7 @@ int main() {
 		.header.length = sizeof(data3)
 	};
 	int id3 = NVM_AddNewRecord(&manager, &record3, 0, 1);
-	NVM_SyncWriteRecord2(&manager, id3, data3);
+	NVM_SyncWriteRecord(&manager, id3, data3);
 	NVM_SyncReadRecord(&manager, id3, data3, &record3);
 	printf("Daten vom Record3:\n");
 	for (int i = 0; i < sizeof(data3); i++) {

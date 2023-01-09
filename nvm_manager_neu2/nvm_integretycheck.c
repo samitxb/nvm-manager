@@ -19,7 +19,7 @@ void NVM_IntegrityCheck(NVMManager* manager) {
         memcpy(&record, &manager->nvm_data[info->start], info->length);
 
         // Prüfe Checksumme
-        if (record.checksum != calc_lrc(&record.data, sizeof(&record.data))) {
+        if (record.checksum != NVM_CalculateChecksum(&record.data, sizeof(&record.data))) {
             // Checksumme ist falsch
             info->valid = false;
             continue;
