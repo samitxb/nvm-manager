@@ -31,6 +31,7 @@ int main() {
 	};
 	//memcpy(record2.data, data2, sizeof(data2));
 
+	
 	// To ADDRecord manger record & readonly & redundant
 	int id1 = NVM_AddNewRecord(&manager, &record1, 0, 0);
 	int id2 = NVM_AddNewRecord(&manager, &record2, 0, 0);
@@ -46,7 +47,6 @@ int main() {
 	for (int i = 0; i < sizeof(data1); i++) {
 		printf("%d\n", record1.data[i]);
 	}
-
 	printf("Daten vom Record2:\n");
 	for (int i = 0; i < sizeof(data2); i++) {
 		printf("%d\n", record2.data[i]);
@@ -55,6 +55,16 @@ int main() {
 	// Lösche Record
 	NVM_DeleteRecord(&manager, id1);
 	NVM_DeleteRecord(&manager, id2);
+	
+
+	/*//Test für Redundanz
+	int id1 = NVM_AddNewRecord(&manager, &record1, 0, 1);
+	NVM_SyncWriteRecord2(&manager, id1, data1);
+	NVM_SyncReadRecord(&manager, id1, data1, &record1);
+	printf("Daten vom Record1:\n");
+	for (int i = 0; i < sizeof(data1); i++) {
+		printf("%d\n", record1.data[i]);
+	}*/
 
 
 	return 0;

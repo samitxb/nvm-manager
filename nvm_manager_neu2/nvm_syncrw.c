@@ -37,17 +37,13 @@ void NVM_SyncWriteRecord2(NVMManager* manager, int id, unsigned char* data) {
 
     // Wenn der Record redundant gespeichert werden soll, speichere ihn noch einmal hintereinander ab
     if (info->redundant) {
-        start = info->start + info->length + 1;
-        manager->nvm_data[start] = id;
-        manager->nvm_data[start + 1] = info->length;
+        start = info->redundancy_start;
         for (int i = 0; i < info->length; i++) {
             manager->nvm_data[start + i] = data[i];
         }
-        manager->nvm_data[start + info->length] = lrc;
     }
 
-    // Setze das Redundanzstart-Flag und das Validitätsflag
-    info->redundancy_start = start;
+    // Setze das Validitätsflag und die Checksum
     info->valid = 1;
     info->checksum = lrc;
 }
@@ -72,22 +68,16 @@ int NVM_SyncReadRecord(NVMManager* manager, int id, unsigned char* data, NVMReco
         return -1;
     }
 
-    // Wenn der Record redundant gespeichert wurde, prüfe auch das zweite Kopie
     if (info->redundant) {
-        int start = info->redundancy_start;
-        if (manager->nvm_data[start] != id || manager->nvm_data[start + 1] != info->length) {
-            printf("Ungültiger redundant gespeicherter Record\n");
-            return -1;
-        }
-        unsigned char lrc2 = 0;
-        for (int i = 0; i < info->length; i++) {
-            lrc2 ^= manager->nvm_data[start + i];
-        }
-        if (manager->nvm_data[start +  info->length] != lrc2) {
-            printf("LRC-Fehler in redundant gespeichertem Record\n");
-            return -1;
-        }
+        // Lese redundanten Record
+        NVMRecord redundantRecord;
+        memcpy(&redundantRecord.data, &manager->nvm_data[info->redundancy_start], info->length);
+
+        unsigned char lrc2 = calc_lrc(redundantRecord.data, info->length);
+        printf("Checksum Read2 Redundant %d\n", lrc2);
+        // Vergleiche Checksummen
         if (lrc1 != lrc2) {
+            // Checksummen sind unterschiedlich
             printf("LRCs im redundant gespeicherten Record unterschiedlich\n");
             return -1;
         }
@@ -95,6 +85,27 @@ int NVM_SyncReadRecord(NVMManager* manager, int id, unsigned char* data, NVMReco
 
     return 0;
 }
+
+/*    // Wenn der Record redundant gespeichert wurde, prüfe auch das zweite Kopie
+if (info->redundant) {
+    int start = info->redundancy_start;
+    if (manager->nvm_data[start] != id || manager->nvm_data[start + 1] != info->length) {
+        printf("Ungültiger redundant gespeicherter Record\n");
+        return -1;
+    }
+    unsigned char lrc2 = 0;
+    for (int i = 0; i < info->length; i++) {
+        lrc2 ^= manager->nvm_data[start + i];
+    }
+    if (manager->nvm_data[start +  info->length] != lrc2) {
+        printf("LRC-Fehler in redundant gespeichertem Record\n");
+        return -1;
+    }
+    if (lrc1 != lrc2) {
+        printf("LRCs im redundant gespeicherten Record unterschiedlich\n");
+        return -1;
+    }
+}*/
 
 /*// Synchron liest einen Record
 int NVM_SyncReadRecord(NVMManager* manager, int id, NVMRecord* record) {
@@ -166,36 +177,6 @@ void NVM_SyncReadRecord(int id, unsigned char* data) {
 }
 */
 
-/*// Schreibt einen Record synchron
-void NVM_SyncWriteRecord(int id, unsigned char* data) {
-
-    if (id < 0 || id >= NVM_NUM_RECORDS || !nvm_records[id].used || !nvm_records[id].rw) {
-        printf("Error: Invalid record ID or record is not writable\n");
-        return;
-    }
-
-    // LRC berechnen
-    unsigned char lrc = calc_lrc(data, nvm_records[id].length);
-
-    // Record schreiben
-    memcpy(&nvm_storage[nvm_records[id].start_pos], data, nvm_records[id].length);
-    if (nvm_records[id].redundant) {
-        memcpy(&nvm_storage[nvm_records[id].redundancy_start_pos], data, nvm_records[id].length);
-    }
-    // Vergleiche LRCs
-    if (nvm_records[id].redundant) {
-        unsigned char lrc1 = calc_lrc(data, nvm_records[id].length);
-        unsigned char lrc2 = calc_lrc(&nvm_storage[nvm_records[id].redundancy_start_pos], nvm_records[id].length);
-        if (lrc1 != lrc2) {
-            printf("Error: LRC check faailed\n");
-            nvm_records[id].valid = 0;
-            return;
-        }
-    }
-
-    nvm_records[id].valid = 1;
-}
-*/
 
 
 

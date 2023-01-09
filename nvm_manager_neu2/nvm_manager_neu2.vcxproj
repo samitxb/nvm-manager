@@ -128,7 +128,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Init.c" />
-    <ClCompile Include="integretycheck.c" />
+    <ClCompile Include="nvm_integretycheck.c" />
     <ClCompile Include="Main.c" />
     <ClCompile Include="nvm_add.c" />
     <ClCompile Include="nvm_del.c" />

@@ -28,7 +28,6 @@ int NVM_AddNewRecord(NVMManager* manager, NVMRecord* record, bool readonly, bool
 
     //Suche nach einem freien Platz im NVM-Speicher
     int start = -1;
-
     for (int i = 0; i < NVM_SIZE - length; i++) {
         bool free = 1;
         for (int j = i; j < i + length; j++) {
@@ -65,12 +64,18 @@ int NVM_AddNewRecord(NVMManager* manager, NVMRecord* record, bool readonly, bool
     info->checksum = 0; // noch nicht sicher, wann checksum in die ALLoktable kommt
 
 
-    //Setzt Speicherbereich auf FF (reservierung?) sollte eigentlich nicht implementiert werden
-    
+    //Setzt Speicherbereich auf FF (reservierung?) sollte eigentlich nicht implementiert werden    
     for (int i = start; i < start + length; i++) {
         manager->nvm_data[i] = 0xff;
     }
     //memcpy(&manager->nvm_data[info->start], record, info->length);
+
+    //Setzt Speicherbereich auf FF (reservierung?) falls redundant
+    if (info->redundant) {
+        for (int i = start; i < info->redundancy_start + length; i++) {
+            manager->nvm_data[i] = 0xff;
+        }
+    }
 
     return id;
 }
