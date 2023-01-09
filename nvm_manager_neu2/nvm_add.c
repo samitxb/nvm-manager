@@ -55,7 +55,7 @@ int NVM_AddNewRecord(NVMManager* manager, NVMRecord* record, bool readonly, bool
     info->readonly = readonly;
     info->redundant = redundant;
     if (redundant) {
-        info->redundancy_start = id + length;
+        info->redundancy_start = start + length;
     }
     else {
         info->redundancy_start = -1;
