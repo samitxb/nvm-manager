@@ -19,7 +19,7 @@ typedef struct {
 typedef struct {
     NVMRecordHeader header; // Header des Records
     unsigned char checksum; // Checksumme des Records
-    unsigned char data[];
+    unsigned char data[NVM_SIZE];
 } NVMRecord;
 
 // Struktur für die Verwaltung von NVM Records

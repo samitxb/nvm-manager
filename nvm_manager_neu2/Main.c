@@ -24,7 +24,7 @@ int main() {
 		.header.length = sizeof(data1)
 	};
 	//memcpy(record1.data, data1, sizeof(data1));
-	unsigned char data2[] = { 1, 2, 3, 4, 5, 6 };
+	unsigned char data2[] = { 1, 2, 3, 4, 5, 6 , 7};
 	NVMRecord record2 = {
 		.header.id = 1,
 		.header.length = sizeof(data2)
@@ -33,26 +33,30 @@ int main() {
 
 	// To ADDRecord manger record & readonly & redundant
 	int id1 = NVM_AddNewRecord(&manager, &record1, 0, 0);
+	int id2 = NVM_AddNewRecord(&manager, &record2, 0, 0);
 
 	//Schreibe Record
 	NVM_SyncWriteRecord2(&manager, id1, data1);
+	NVM_SyncWriteRecord2(&manager, id2, data2);
+
+	//Read Record
+	NVM_SyncReadRecord(&manager, id1, data1, &record1);
+	NVM_SyncReadRecord(&manager, id2, data2, &record2);
+	printf("Daten vom Record1:\n");
+	for (int i = 0; i < sizeof(data1); i++) {
+		printf("%d\n", record1.data[i]);
+	}
+
+	printf("Daten vom Record2:\n");
+	for (int i = 0; i < sizeof(data2); i++) {
+		printf("%d\n", record2.data[i]);
+	}
+	
+
 
 	// Lösche Record
 	NVM_DeleteRecord(&manager, id1);
-
-
-	
-	/*	int id2 = NVM_AddNewRecord(&manager, &record2, 0, 0);
-	NVM_SyncWriteRecord2(&manager, id2, data1);
-	NVM_DeleteRecord(&manager, id2);*/
-
-	/*	NVMRecord record1;
-	unsigned char data1[6] = { 1, 2, 3, 4, 5, 6 };
-	memcpy(record1.data, data1, sizeof(data1)); //wird dann komischer weise 2x geschrieben
-	printf("Size of Record Data %d\n", sizeof(data1));
-	printf("Size of Record Data %zd\n", record1.data);*/
-	//record1.header.id = 0;
-	//record1.header.length = sizeof(data);
+	NVM_DeleteRecord(&manager, id2);
 
 
 	return 0;

@@ -32,7 +32,7 @@ int NVM_AddNewRecord(NVMManager* manager, NVMRecord* record, bool readonly, bool
     for (int i = 0; i < NVM_SIZE - length; i++) {
         bool free = 1;
         for (int j = i; j < i + length; j++) {
-            if (manager->nvm_data[j] == 0xff) {    // war davor != 0xff
+            if (manager->nvm_data[j] != 0) {    // war davor != 0xff
                 free = 0;
                 break;
             }
