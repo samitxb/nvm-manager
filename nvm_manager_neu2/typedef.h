@@ -8,6 +8,7 @@
 #define NVM_SIZE 1014 
 #define NVM_HEADER_SIZE 4
 #define ALLOC_TABLE_SIZE 100
+#define QUEUE_SIZE 100
 
 // Struktur für den Header eines NVM-Records
 typedef struct {
@@ -40,4 +41,9 @@ typedef struct {
 typedef struct {
     NVMRecordInfo allocTable[ALLOC_TABLE_SIZE]; // Allokationstabelle
     unsigned char nvm_data[NVM_SIZE]; // NVM-Speicher
+    int queue[QUEUE_SIZE]; // Asynchrone Schreib-/Lesewarteschlange
+    int queueStart; // Startposition der Warteschlange
+    int queueEnd; // Endposition der Warteschlange
+    int queueCount; // Anzahl der Einträge in der Warteschlange
+    int queueRecords[];
 } NVMManager;
