@@ -36,6 +36,7 @@ typedef struct {
     unsigned char checksum;
 } NVMRecordInfo;
 
+typedef void (*NVMWriteCallback)(int status);
 
 // Struktur für den NVM-Manager
 typedef struct {
@@ -45,5 +46,7 @@ typedef struct {
     int queueStart; // Startposition der Warteschlange
     int queueEnd; // Endposition der Warteschlange
     int queueCount; // Anzahl der Einträge in der Warteschlange
+    NVMWriteCallback writeCallbacks[QUEUE_SIZE];
     int queueRecords[];
 } NVMManager;
+

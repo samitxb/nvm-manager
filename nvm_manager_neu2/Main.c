@@ -16,6 +16,7 @@ int main() {
 	// Initialisiere NVM Manager
 	NVMManager manager;
 	NVM_Init(&manager);
+
 	
 
 	//Neuer Record
@@ -61,11 +62,23 @@ int main() {
 	int id3 = NVM_AddNewRecord(&manager, &record3, 0, 1);
 	NVM_SyncWriteRecord(&manager, id3, data3);
 	NVM_SyncReadRecord(&manager, id3, data3, &record3);
-	printf("Daten vom Record3:\n");
+	printf("Daten vom Record3: ");
 	for (int i = 0; i < sizeof(data3); i++) {
-	printf("%d\n", record3.data[i]);
+	printf("%d ", record3.data[i]);
 	}
+	
 
+	while (1)
+	{
+		NVM_AsyncWriteRecord(&manager, id3, data3, &record3);
+		NVM_AsyncReadRecord(&manager, id2, data2, &record2);
+
+		if (manager.queueCount == 100)
+		{
+			printf("\nfinish!");
+			break;
+		}
+	}
 	// Lösche Record
 	NVM_DeleteRecord(&manager, id1);
 	NVM_DeleteRecord(&manager, id2);
