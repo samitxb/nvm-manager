@@ -17,8 +17,9 @@ unsigned char NVM_CalculateChecksum(unsigned char* data, int data_size) {
 
 
 // Synchrones Schreiben eines Records
-void NVM_SyncWriteRecord(NVMManager* manager, int id, unsigned char* data) {
+void NVM_SyncWriteRecord(NVMManager* manager, NVMRecord* record, unsigned char* data) {
 
+    int id = record->header.id;
     NVMRecordInfo* info = &manager->allocTable[id];
     // Prüfe, ob der Record existiert und schreibbar ist
     if (id < 0 || id >= NVM_SIZE || !info->used || info->readonly) {
@@ -28,6 +29,7 @@ void NVM_SyncWriteRecord(NVMManager* manager, int id, unsigned char* data) {
     // Berechne Checksumme
     unsigned char lrc1 = NVM_CalculateChecksum(data, info->length);
     printf("CHecksum Write2= %d\n", lrc1);
+    record->checksum = lrc1;
 
     // Schreibe den Record im NVM-Speicher
     int start = info->start;
@@ -56,7 +58,8 @@ void NVM_SyncWriteRecord(NVMManager* manager, int id, unsigned char* data) {
 }
 
 // Synchrones Lesen eines Records
-int NVM_SyncReadRecord(NVMManager* manager, int id, unsigned char* data, NVMRecord* record) {
+int NVM_SyncReadRecord(NVMManager* manager, unsigned char* data, NVMRecord* record) {
+    int id = record->header.id;
     NVMRecordInfo* info = &manager->allocTable[id];
     // Prüfe, ob der Record existiert
     if (id < 0 || id >= ALLOC_TABLE_SIZE || !info->used) {
@@ -92,5 +95,6 @@ int NVM_SyncReadRecord(NVMManager* manager, int id, unsigned char* data, NVMReco
 
     return 0;
 }
+
 
 
