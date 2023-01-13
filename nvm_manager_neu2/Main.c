@@ -17,8 +17,6 @@ int main() {
 	NVMManager manager;
 	NVM_Init(&manager);
 
-	
-
 	//Neuer Record
 	unsigned char data1[] = { 1, 2, 3, 4, 5 };
 	NVMRecord record1 = {
@@ -45,14 +43,16 @@ int main() {
 	NVM_SyncReadRecord(&manager, id1, data1, &record1);
 	NVM_SyncReadRecord(&manager, id2, data2, &record2);
 	printf("Daten vom Record1:\n");
+
 	for (int i = 0; i < sizeof(data1); i++) {
-		printf("%d\n", record1.data[i]);
+		printf("%d ", record1.data[i]);
 	}
+	printf("\n");
 	printf("Daten vom Record2:\n");
 	for (int i = 0; i < sizeof(data2); i++) {
-		printf("%d\n", record2.data[i]);
+		printf("%d ", record2.data[i]);
 	}
-
+	printf("\n");
 	//Record für Redundanz
 	unsigned char data3[] = { 1, 2, 3, 4, 5, 6 , 7 };
 	NVMRecord record3 = {
@@ -62,10 +62,11 @@ int main() {
 	int id3 = NVM_AddNewRecord(&manager, &record3, 0, 1);
 	NVM_SyncWriteRecord(&manager, id3, data3);
 	NVM_SyncReadRecord(&manager, id3, data3, &record3);
-	printf("Daten vom Record3: ");
+	printf("Daten vom Record3: \n ");
 	for (int i = 0; i < sizeof(data3); i++) {
 	printf("%d ", record3.data[i]);
 	}
+	printf("\n");
 	
 
 	while (1)

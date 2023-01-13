@@ -12,7 +12,7 @@ int NVM_AddNewRecord(NVMManager* manager, NVMRecord* record, bool readonly, bool
     int length = record->header.length;
     printf("length: %d\n", length);
 
-
+    
     int id = -1;
     for (int i = 0; i < ALLOC_TABLE_SIZE; i++) {
         if (!manager->allocTable[i].used) {

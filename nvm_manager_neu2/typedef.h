@@ -23,7 +23,7 @@ typedef struct {
     unsigned char data[NVM_SIZE];
 } NVMRecord;
 
-// Struktur für die Verwaltung von NVM Records
+// Struktur für die Verwaltung von NVM Records+
 typedef struct {
     int id; // ID des Records
     int start; // Startposition des Records im NVM-Speicher
@@ -47,6 +47,6 @@ typedef struct {
     int queueEnd; // Endposition der Warteschlange
     int queueCount; // Anzahl der Einträge in der Warteschlange
     NVMWriteCallback writeCallbacks[QUEUE_SIZE];
-    int queueRecords[];
+    int queueRecords[QUEUE_SIZE];
 } NVMManager;
 
