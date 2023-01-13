@@ -40,8 +40,8 @@ int main() {
 	NVM_SyncWriteRecord(&manager, &record2, data2);
 
 	//Read Record
-	NVM_SyncReadRecord(&manager, data1, &record1);
-	NVM_SyncReadRecord(&manager, data2, &record2);
+	NVM_SyncReadRecord(&manager, &record1);
+	NVM_SyncReadRecord(&manager, &record2);
 	printf("Daten vom Record1:\n");
 
 	for (int i = 0; i < sizeof(data1); i++) {
@@ -61,7 +61,7 @@ int main() {
 	};
 	int id3 = NVM_AddNewRecord(&manager, &record3, 0, 1);
 	NVM_SyncWriteRecord(&manager, &record3, data3);
-	NVM_SyncReadRecord(&manager, data3, &record3);
+	NVM_SyncReadRecord(&manager, &record3);
 	printf("Daten vom Record3: \n ");
 	for (int i = 0; i < sizeof(data3); i++) {
 	printf("%d ", record3.data[i]);
@@ -80,6 +80,7 @@ int main() {
 			break;
 		}
 	}
+
 	// Lösche Record
 	NVM_DeleteRecord(&manager, id1);
 	NVM_DeleteRecord(&manager, id2);

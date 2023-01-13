@@ -58,7 +58,7 @@ void NVM_SyncWriteRecord(NVMManager* manager, NVMRecord* record, unsigned char* 
 }
 
 // Synchrones Lesen eines Records
-int NVM_SyncReadRecord(NVMManager* manager, unsigned char* data, NVMRecord* record) {
+int NVM_SyncReadRecord(NVMManager* manager, NVMRecord* record) {
     int id = record->header.id;
     NVMRecordInfo* info = &manager->allocTable[id];
     // Prüfe, ob der Record existiert
