@@ -34,6 +34,6 @@ void NVM_ReorganizeRecords(NVMManager* manager) {
     for (i = 0; i < NVM_SIZE; i++) {
         manager->nvm_data[i] = tempNVM[i];
     }
-    // rufen Sie die updateAllocTable() Funktion auf, um die Allocationstabelle zu aktualisieren
+
     updateAllocTable(manager);
 }
