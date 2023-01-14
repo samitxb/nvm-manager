@@ -4,31 +4,36 @@
 #include <stdbool.h>
 
 #include "typedef.h"
-
+#include "resizeAllocTable.h"
+#include "updateAllocTable.h"
 
 void NVM_ReorganizeRecords(NVMManager* manager) {
-    int index = 0;
-    //Anlegen eines AllocTables mit der gleichen Größe von nvm_data
-    NVMRecordInfo biggerAllocTable[NVM_SIZE];
+    int i, j;
 
-    for (int i = 0; i < NVM_SIZE; i++) {
-        if (&manager->nvm_data[i] != 0xff) {
-            manager->nvm_data[index] = manager->nvm_data[i];
-            /*
-            //Aktualisieren der Daten im AllocTable
-            manager->allocTable[index].id = biggerAllocTable[i].id;                 //&manager->biggerAllocTable[i].id;
-            manager->allocTable[index].start = biggerAllocTable[i].start;           //i;
-            manager->allocTable[index].length = biggerAllocTable[i].length;         //&manager->allocTable[i].length;
-            */
+    // Erstelle temporäres NVM-Speicher-Array
+    unsigned char tempNVM[NVM_SIZE];
+    memset(tempNVM, 0xFF, NVM_SIZE);
 
+    int currentPos = 0;
 
-
-            index++;
+    // Iteriere durch die Allocationstabelle
+    for (i = 0; i < ALLOC_TABLE_SIZE; i++) {
+        // Überprüfe, ob der aktuelle Eintrag in der Allocationstabelle verwendet wird
+        if (manager->allocTable[i].used) {
+            // Kopiere den Record-Datenblock in den temporären NVM-Speicher
+            for (j = 0; j < manager->allocTable[i].length; j++) {
+                tempNVM[currentPos + j] = manager->nvm_data[manager->allocTable[i].start + j];
+            }
+            // Aktualisiere die Startposition des Eintrags in der Allocationstabelle
+            manager->allocTable[i].start = currentPos;
+            // Erhöhe currentPos um die Länge des Eintrags
+            currentPos += manager->allocTable[i].length;
         }
     }
-    for (int i = index; i < NVM_SIZE; i++) {
-        manager->nvm_data[i] = 0x00;
-        manager->allocTable[i].id = 0;
+    // Kopiere den reorganisierten NVM-Speicher zurück in den originalen NVM-Speicher
+    for (i = 0; i < NVM_SIZE; i++) {
+        manager->nvm_data[i] = tempNVM[i];
     }
+    // rufen Sie die updateAllocTable() Funktion auf, um die Allocationstabelle zu aktualisieren
+    updateAllocTable(manager);
 }
-

@@ -11,10 +11,13 @@
 #include "nvm_asyncrw.h"
 #include "nvm_reorganize.h"
 #include "resizeAllocTable.h"
+#include "updateAllocTable.h"
 
 
 
 int main() {
+	printf("\033[0;37m");
+
 	// Initialisiere NVM Manager
 	NVMManager manager;
 	NVM_Init(&manager);
@@ -88,17 +91,24 @@ int main() {
 
 
 	//Testsequenz für resizeAllocTable
+	printf("\n\n\033[0;36m Testsequenz für resizeAllocTable(): \n\033[0;37m");
 	biggerAllocTable* newAllocTable = resizeAllocTable(&manager);
-	printf("\n\n \046[0;36m Einträge der resized AllocTable: \n");
+
 	for (int i = 0; i < 30 /*eigentlich NVM_SIZE*/; i++) {
 		printf("Eintrag %d: ID = %d, Start = %d, Länge = %d\n", i, newAllocTable[i].id, newAllocTable[i].start, newAllocTable[i].length);
 	}
-	
+
+		//Test warum IDs für nicht vorhandene übertrieben ist
+		printf("\n\n\nEintrag %d: ID = %d, Start = %d, Länge = %d\n", 0, newAllocTable[0].id, newAllocTable[0].start, newAllocTable[0].length);
+		printf("\n\n\nEintrag %d: ID = %d, Start = %d, Länge = %d\n", 10, newAllocTable[10].id, newAllocTable[10].start, newAllocTable[10].length);
+		printf("\n\n\nEintrag %d: ID = %d, Start = %d, Länge = %d\n", 16, newAllocTable[16].id, newAllocTable[16].start, newAllocTable[16].length);
 
 
 	//Testsequenz für reorg funktion
+	printf("\n\n\033[0;36m Testsequenz für resizeAllocTable(): \n\033[0;37m");
+
 	NVM_DeleteRecord(&manager, id2);
-	NVM_ReorganizeRecords(&manager);
+	NVM_ReorganizeRecords(&manager, newAllocTable);
 
 
 
