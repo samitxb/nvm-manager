@@ -76,6 +76,12 @@ int main() {
 	}
 	
 
+	for (int i = 0; i < 7; i++)
+	{
+		NVM_Handler(&manager, i, &record1, 0);
+		int breakpoint2 = 0;
+
+	}
 
 	
 	//Testsequenz für reorg funktion
