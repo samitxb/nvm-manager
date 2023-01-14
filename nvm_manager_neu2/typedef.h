@@ -50,3 +50,10 @@ typedef struct {
     int queueRecords[];
 } NVMManager;
 
+
+typedef struct {
+    int id;
+    int start;
+    int length;
+} biggerAllocTable;
+

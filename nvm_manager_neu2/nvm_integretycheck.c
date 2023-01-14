@@ -9,7 +9,7 @@
 void NVM_IntegrityCheck(NVMManager* manager) {
     for (int i = 0; i < ALLOC_TABLE_SIZE; i++) {
         NVMRecordInfo* info = &manager->allocTable[i];
-        if (!info->used) {
+        if (!info->used || !info->valid) {
             // Record existiert nicht
             continue;
         }
@@ -33,16 +33,32 @@ void NVM_IntegrityCheck(NVMManager* manager) {
             memcpy(&redundantRecord, &manager->nvm_data[info->redundancy_start], info->length);
 
             // Prüfe Checksumme des redundanten Records
-            if (record.checksum != calc_lrc(calc_lrc(&record.data, sizeof(&record.data))) {    
+            if (record.checksum != calc_lrc(calc_lrc(&record.data, sizeof(&record.data)))) {
                 // Checksumme des redundanten Records ist falsch
                 info->valid = false;
-                continue;
+                    continue;
             }
         }
+    
         */
+        
 
         // Record ist gültig
         info->valid = true;
     }
 }
 
+
+void NVM_CheckIntegrity(NVMManager* manager) {
+    for (int i = 0; i < ALLOC_TABLE_SIZE; i++) {
+        NVMRecordInfo* info = &manager->allocTable[i];
+        if (info->used && info->valid) {
+            // Berechne Checksum des Records
+            unsigned char checksum = NVM_CalculateChecksum(&manager->nvm_data[info->start], info->length);
+            if (checksum != info->checksum) {
+                printf("Fehler: Integritätsprüfung fehlgeschlagen bei Record mit ID %d\n", i);
+                // Optional: Führe Fehlerkorrekturmaßnahmen aus
+            }
+        }
+    }
+}

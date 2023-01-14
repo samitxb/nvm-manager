@@ -28,8 +28,12 @@ void NVM_DeleteRecord(NVMManager* manager, int id) {
     info->used = 0;
     info->readonly = 0;
     info->redundant = 0;
-    info->redundancy_start = -1;
-    info->valid = 1;
+    info->redundancy_start = 0;
+    info->valid = 0;
+    info->id = 0;
+    info->length = 0;
+    info->start = 0;
+    info->checksum = 0;
 }
 
 /*// Löscht einen Record
