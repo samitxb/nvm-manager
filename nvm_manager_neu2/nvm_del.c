@@ -20,6 +20,11 @@ void NVM_DeleteRecord(NVMManager* manager, int id) {
     for (int i = info->start; i < info->start + info->length; i++) {
         manager->nvm_data[i] = 0xff;
     }
+    if (info->redundant) {
+        for (int i = info->redundancy_start; i < info->redundancy_start + info->length; i++) {
+            manager->nvm_data[i] = 0xff;
+        }
+    }
     info->used = 0;
     info->readonly = 0;
     info->redundant = 0;
