@@ -17,14 +17,14 @@ unsigned char NVM_CalculateChecksum(unsigned char* data, int data_size) {
 
 
 // Synchrones Schreiben eines Records
-void NVM_SyncWriteRecord(NVMManager* manager, NVMRecord* record, unsigned char* data) {
+int NVM_SyncWriteRecord(NVMManager* manager, NVMRecord* record, unsigned char* data) {
 
     int id = record->header.id;
     NVMRecordInfo* info = &manager->allocTable[id];
     // Prüfe, ob der Record existiert und schreibbar ist
     if (id < 0 || id >= NVM_SIZE || !info->used || info->readonly) {
         printf("Ungültige ID oder Record ist schreibgeschützt\n");
-        return;
+        return -1;
     }
     // Berechne Checksumme
     unsigned char lrc1 = NVM_CalculateChecksum(data, info->length);
@@ -55,6 +55,8 @@ void NVM_SyncWriteRecord(NVMManager* manager, NVMRecord* record, unsigned char* 
     // Setze das Validitätsflag und die Checksum
     info->valid = 1;
     info->checksum = lrc1;
+
+    return 0;
 }
 
 // Synchrones Lesen eines Records
