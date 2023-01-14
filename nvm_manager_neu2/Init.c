@@ -29,5 +29,12 @@ void NVM_Init(NVMRecordManager* nvm_alloctable, unsigned char nvm_data[]) {
 int NVM_Init(NVMManager* manager) {
 	memset(manager, 0, sizeof(NVMManager));
 
+	// Initialisiere die Warteschlange
+	manager->queueStart = 0;
+	manager->queueEnd = 0;
+	manager->queueCount = 0;
+
+
+
 	return 0;
 }

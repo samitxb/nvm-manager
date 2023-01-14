@@ -66,25 +66,14 @@ int main() {
 	for (int i = 0; i < sizeof(data3); i++) {
 	printf("%d ", record3.data[i]);
 	}
-	printf("\n");
 	
 
-	while (1)
-	{
-		NVM_AsyncWriteRecord(&manager, id3, data3, &record3);
-		NVM_AsyncReadRecord(&manager, id2, data2, &record2);
-
-		if (manager.queueCount == 100)
-		{
-			printf("\nfinish!");
-			break;
-		}
-	}
 
 	// Lösche Record
 	NVM_DeleteRecord(&manager, id1);
 	NVM_DeleteRecord(&manager, id2);
 	NVM_DeleteRecord(&manager, id3);
+
 
 	return 0;
 }
