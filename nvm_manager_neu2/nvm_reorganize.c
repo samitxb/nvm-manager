@@ -12,7 +12,7 @@ void NVM_ReorganizeRecords(NVMManager* manager) {
 
     // Erstelle temporäres NVM-Speicher-Array
     unsigned char tempNVM[NVM_SIZE];
-    memset(tempNVM, 0xFF, NVM_SIZE);
+    memset(tempNVM, 0, NVM_SIZE);
 
     int currentPos = 0;
 

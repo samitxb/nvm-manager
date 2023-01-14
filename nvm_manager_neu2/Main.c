@@ -108,7 +108,11 @@ int main() {
 	printf("\n\n\033[0;36m Testsequenz für resizeAllocTable(): \n\033[0;37m");
 
 	NVM_DeleteRecord(&manager, id2);
-	NVM_ReorganizeRecords(&manager, newAllocTable);
+	NVM_ReorganizeRecords(&manager);
+
+	int id4 = NVM_AddNewRecord(&manager, &record1, 0, 0);
+
+	NVM_ReorganizeRecords(&manager);
 
 
 
