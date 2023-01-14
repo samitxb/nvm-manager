@@ -98,6 +98,15 @@ int main() {
 		printf("Eintrag %d: ID = %d, Start = %d, Länge = %d\n", i, newAllocTable[i].id, newAllocTable[i].start, newAllocTable[i].length);
 	}
 
+
+	//Testsequenz für resizeAllocTable
+	printf("\n\n\033[0;36m Testsequenz für resizeAllocTable(): \n\033[0;37m");
+	biggerAllocTable* newAllocTable = resizeAllocTable(&manager);
+
+	for (int i = 0; i < 30 /*eigentlich NVM_SIZE*/; i++) {
+		printf("Eintrag %d: ID = %d, Start = %d, Länge = %d\n", i, newAllocTable[i].id, newAllocTable[i].start, newAllocTable[i].length);
+	}
+
 		//Test warum IDs für nicht vorhandene übertrieben ist
 		printf("\n\n\nEintrag %d: ID = %d, Start = %d, Länge = %d\n", 0, newAllocTable[0].id, newAllocTable[0].start, newAllocTable[0].length);
 		printf("\n\n\nEintrag %d: ID = %d, Start = %d, Länge = %d\n", 10, newAllocTable[10].id, newAllocTable[10].start, newAllocTable[10].length);
