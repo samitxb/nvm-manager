@@ -28,7 +28,7 @@ void NVM_SyncWriteRecord(NVMManager* manager, NVMRecord* record, unsigned char* 
     }
     // Berechne Checksumme
     unsigned char lrc1 = NVM_CalculateChecksum(data, info->length);
-    printf("CHecksum Write2= %d\n", lrc1);
+    printf("Checksum Write2= %d\n", lrc1);
     record->checksum = lrc1;
 
     // Schreibe den Record im NVM-Speicher
@@ -40,7 +40,7 @@ void NVM_SyncWriteRecord(NVMManager* manager, NVMRecord* record, unsigned char* 
     // Wenn der Record redundant gespeichert werden soll, speichere ihn noch einmal hintereinander ab
     if (info->redundant) {
         unsigned char lrc2 = NVM_CalculateChecksum(data, info->length);
-        printf("CHecksum Write2 Redundant = %d\n", lrc1);
+        printf("Checksum Write2 Redundant = %d\n", lrc1);
         if (lrc1 != lrc2) {
             printf("Unterschiedliche LRCs bei Berechnung");
             info->valid = 0;

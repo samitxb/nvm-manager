@@ -9,6 +9,8 @@
 #include "nvm_del.h"
 #include "nvm_syncrw.h"
 #include "nvm_asyncrw.h"
+#include "nvm_reorganize.h"
+#include "resizeAllocTable.h"
 
 
 
@@ -53,6 +55,9 @@ int main() {
 		printf("%d ", record2.data[i]);
 	}
 	printf("\n");
+
+
+
 	//Record für Redundanz
 	unsigned char data3[] = { 1, 2, 3, 4, 5, 6 , 7 };
 	NVMRecord record3 = {
@@ -80,6 +85,24 @@ int main() {
 			break;
 		}
 	}
+
+
+	//Testsequenz für resizeAllocTable
+	biggerAllocTable* newAllocTable = resizeAllocTable(&manager);
+	printf("\n\n \046[0;36m Einträge der resized AllocTable: \n");
+	for (int i = 0; i < 30 /*eigentlich NVM_SIZE*/; i++) {
+		printf("Eintrag %d: ID = %d, Start = %d, Länge = %d\n", i, newAllocTable[i].id, newAllocTable[i].start, newAllocTable[i].length);
+	}
+	
+
+
+	//Testsequenz für reorg funktion
+	NVM_DeleteRecord(&manager, id2);
+	NVM_ReorganizeRecords(&manager);
+
+
+
+
 
 	// Lösche Record
 	NVM_DeleteRecord(&manager, id1);

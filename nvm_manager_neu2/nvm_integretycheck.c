@@ -33,13 +33,15 @@ void NVM_IntegrityCheck(NVMManager* manager) {
             memcpy(&redundantRecord, &manager->nvm_data[info->redundancy_start], info->length);
 
             // Prüfe Checksumme des redundanten Records
-            if (record.checksum != calc_lrc(calc_lrc(&record.data, sizeof(&record.data))) {    
+            if (record.checksum != calc_lrc(calc_lrc(&record.data, sizeof(&record.data)))) {
                 // Checksumme des redundanten Records ist falsch
                 info->valid = false;
-                continue;
+                    continue;
             }
         }
+    
         */
+        
 
         // Record ist gültig
         info->valid = true;
