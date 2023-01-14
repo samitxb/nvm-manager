@@ -136,6 +136,7 @@
     <ClCompile Include="nvm_reorganize.c" />
     <ClCompile Include="nvm_syncrw.c" />
     <ClCompile Include="resizeAllocTable.c" />
+    <ClCompile Include="updateAllocTable.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Init.h" />
@@ -146,6 +147,7 @@
     <ClInclude Include="nvm_syncrw.h" />
     <ClInclude Include="resizeAllocTable.h" />
     <ClInclude Include="typedef.h" />
+    <ClInclude Include="updateAllocTable.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
