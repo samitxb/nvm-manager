@@ -6,7 +6,6 @@
 #include <stdbool.h>
 
 #define NVM_SIZE 1014 
-#define NVM_HEADER_SIZE 4
 #define ALLOC_TABLE_SIZE 100
 #define QUEUE_SIZE 100
 

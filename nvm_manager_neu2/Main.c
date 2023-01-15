@@ -25,16 +25,16 @@ int main() {
 	//Neuer Record
 	unsigned char data1[] = { 1, 2, 3, 4, 5 };
 	NVMRecord record1 = {
-		.header.id = 0,
+		//.header.id = 0,
 		.header.length = sizeof(data1)
 	};
-	//memcpy(record1.data, data1, sizeof(data1));
+	
 	unsigned char data2[] = { 1, 2, 3, 4, 5, 6 , 7};
 	NVMRecord record2 = {
-		.header.id = 1,
+		//.header.id = 1,
 		.header.length = sizeof(data2)
 	};
-	//memcpy(record2.data, data2, sizeof(data2));
+	
 
 	// To ADDRecord manger record & readonly & redundant
 	int id1 = NVM_AddNewRecord(&manager, &record1, 0, 0);
@@ -63,9 +63,9 @@ int main() {
 
 
 	//Record für Redundanz
-	unsigned char data3[] = { 1, 2, 3, 4, 5, 6 , 7 };
+	unsigned char data3[] = { 1, 2, 3, 4, 5, 6 , 7, 8 };
 	NVMRecord record3 = {
-		.header.id = 2,
+		//.header.id = 2,
 		.header.length = sizeof(data3)
 	};
 	int id3 = NVM_AddNewRecord(&manager, &record3, 0, 1);

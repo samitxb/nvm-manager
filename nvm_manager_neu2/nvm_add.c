@@ -12,6 +12,7 @@ int NVM_AddNewRecord(NVMManager* manager, NVMRecord* record, bool readonly, bool
     int length = record->header.length;
     printf("length: %d\n", length);
 
+    //Suche nach einem freien Platz in der Allokationstabelle
     int id = -1;
     for (int i = 0; i < ALLOC_TABLE_SIZE; i++) {
         if (!manager->allocTable[i].used) {
@@ -30,7 +31,7 @@ int NVM_AddNewRecord(NVMManager* manager, NVMRecord* record, bool readonly, bool
     for (int i = 0; i < NVM_SIZE - length; i++) {
         bool free = 1;
         for (int j = i; j < i + length; j++) {
-            if (manager->nvm_data[j] != 0) {    // war davor != 0xff
+            if (manager->nvm_data[j] != 0) {  
                 free = 0;
                 break;
             }
@@ -56,12 +57,8 @@ int NVM_AddNewRecord(NVMManager* manager, NVMRecord* record, bool readonly, bool
     if (redundant) {
         info->redundancy_start = start + length;
     }
-    else {
-        info->redundancy_start = -1;
-    }
     info->valid = 1;
-    info->checksum = 0; // noch nicht sicher, wann checksum in die ALLoktable kommt
-
+    info->checksum = 0;
 
     //Setzt Speicherbereich auf FF (reservierung?) sollte eigentlich nicht implementiert werden    
     for (int i = start; i < start + length; i++) {
@@ -76,5 +73,6 @@ int NVM_AddNewRecord(NVMManager* manager, NVMRecord* record, bool readonly, bool
         }
     }
 
+    record->header.id = id;
     return id;
 }
