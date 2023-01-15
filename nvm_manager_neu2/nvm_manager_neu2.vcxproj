@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="demoapplikation.c" />
     <ClCompile Include="Init.c" />
     <ClCompile Include="nvm_asyncrw.c" />
     <ClCompile Include="nvm_integretycheck.c" />

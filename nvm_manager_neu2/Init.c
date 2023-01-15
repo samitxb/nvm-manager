@@ -35,6 +35,5 @@ int NVM_Init(NVMManager* manager) {
 	manager->queueCount = 0;
 
 
-
 	return 0;
 }

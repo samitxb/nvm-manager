@@ -52,6 +52,7 @@ int main() {
 	for (int i = 0; i < sizeof(data1); i++) {
 		printf("%d ", record1.data[i]);
 	}
+
 	printf("\n");
 	printf("Daten vom Record2:\n");
 	for (int i = 0; i < sizeof(data2); i++) {
@@ -74,16 +75,15 @@ int main() {
 	for (int i = 0; i < sizeof(data3); i++) {
 	printf("%d ", record3.data[i]);
 	}
-	
 
-	for (int i = 0; i < 7; i++)
+
+	for (int i = 0; i < 11; i++)
 	{
-		NVM_Handler(&manager, i, &record1, 0);
+		NVM_Handler(&manager, i, 0);
 		int breakpoint2 = 0;
 
 	}
-
-	
+	 
 	//Testsequenz für reorg funktion
 	printf("\n\n\033[0;36m Testsequenz für resizeAllocTable(): \n\033[0;37m");
 
