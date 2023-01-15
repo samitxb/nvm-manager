@@ -9,56 +9,24 @@
 void NVM_IntegrityCheck(NVMManager* manager) {
     for (int i = 0; i < ALLOC_TABLE_SIZE; i++) {
         NVMRecordInfo* info = &manager->allocTable[i];
-        if (!info->used || !info->valid) {
+        if (!info->used) {
             // Record existiert nicht
             continue;
         }
 
         // Lese Record
         NVMRecord record;
-        memcpy(&record, &manager->nvm_data[info->start], info->length);
+        memcpy(&record.data, &manager->nvm_data[info->start], info->length);
 
         // Prüfe Checksumme
-        if (record.checksum != NVM_CalculateChecksum(&record.data, sizeof(&record.data))) {
+        if (info->checksum != NVM_CalculateChecksum(&record.data, info->length)) {
             // Checksumme ist falsch
             info->valid = false;
+            printf("\e[0m\033[0; 37Fehler: Integritätsprüfung fehlgeschlagen bei Record mit ID %d\e[0m\n", i);
             continue;
         }
 
-        /*
-
-        if (info->redundant) {
-            // Lese redundanten Record
-            NVMRecord redundantRecord;
-            memcpy(&redundantRecord, &manager->nvm_data[info->redundancy_start], info->length);
-
-            // Prüfe Checksumme des redundanten Records
-            if (record.checksum != calc_lrc(calc_lrc(&record.data, sizeof(&record.data)))) {
-                // Checksumme des redundanten Records ist falsch
-                info->valid = false;
-                    continue;
-            }
-        }
-    
-        */
-        
-
         // Record ist gültig
         info->valid = true;
-    }
-}
-
-
-void NVM_CheckIntegrity(NVMManager* manager) {
-    for (int i = 0; i < ALLOC_TABLE_SIZE; i++) {
-        NVMRecordInfo* info = &manager->allocTable[i];
-        if (info->used && info->valid) {
-            // Berechne Checksum des Records
-            unsigned char checksum = NVM_CalculateChecksum(&manager->nvm_data[info->start], info->length);
-            if (checksum != info->checksum) {
-                printf("Fehler: Integritätsprüfung fehlgeschlagen bei Record mit ID %d\n", i);
-                // Optional: Führe Fehlerkorrekturmaßnahmen aus
-            }
-        }
     }
 }
