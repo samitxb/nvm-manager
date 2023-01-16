@@ -7,9 +7,10 @@
 
 
 // Berechnet die LRC (byteweise XOR Verknüpfung aller Datenbytes) eines Records
-unsigned char NVM_CalculateChecksum(unsigned char* data, int data_size) {
+unsigned char NVM_CalculateChecksum(unsigned char* data, int dataSize) {
+
     unsigned char checksum = 0;
-    for (int i = 0; i < data_size; i++) {
+    for (int i = 0; i < dataSize; i++) {
         checksum ^= data[i];
     }
     return checksum;
@@ -17,7 +18,7 @@ unsigned char NVM_CalculateChecksum(unsigned char* data, int data_size) {
 
 
 // Synchrones Schreiben eines Records
-int NVM_SyncWriteRecord(NVMManager* manager, NVMRecord* record, unsigned char* data) {
+int NVM_SyncWriteRecord(NVMManager* manager, NVMRecord* record) {
 
     int id = record->header.id;
     NVMRecordInfo* info = &manager->allocTable[id];
@@ -28,18 +29,18 @@ int NVM_SyncWriteRecord(NVMManager* manager, NVMRecord* record, unsigned char* d
         return -1;
     }
     // Berechne Checksumme
-    unsigned char checksum1 = NVM_CalculateChecksum(data, info->length);
+    unsigned char checksum1 = NVM_CalculateChecksum(record->data, info->length);
     record->checksum = checksum1;
 
     // Schreibe den Record im NVM-Speicher
     int start = info->start;
     for (int i = 0; i < info->length; i++) {
-        manager->nvmData[start + i] = data[i];
+        manager->nvmData[start + i] = record->data[i];
     }
 
     // Wenn der Record redundant gespeichert werden soll, speichere ihn noch einmal hintereinander ab
     if (info->redundant) {
-        unsigned char checksum2 = NVM_CalculateChecksum(data, info->length);
+        unsigned char checksum2 = NVM_CalculateChecksum(record->data, info->length);
         if (checksum1 != checksum2) {
             printf("Unterschiedliche LRCs bei Berechnung!\n");
             info->valid = 0;
@@ -47,7 +48,7 @@ int NVM_SyncWriteRecord(NVMManager* manager, NVMRecord* record, unsigned char* d
         }
         start = info->redundancyStart;
         for (int i = 0; i < info->length; i++) {
-            manager->nvmData[start + i] = data[i];
+            manager->nvmData[start + i] = record->data[i];
         }
     }
 
@@ -57,6 +58,11 @@ int NVM_SyncWriteRecord(NVMManager* manager, NVMRecord* record, unsigned char* d
 
     //Setzt falls nötig das endgültige readonly flag
     info->readonly = info->readonlyFirst;
+
+    // Löscht die Daten aus dem Record
+    for (int i = 0; i < info->length; i++) {
+        record->data[i] = 0;
+    }
 
     printf("Record & Daten mit der ID: %d erfolgreich in den NVM-Speicher geschrieben!\n", id);
     return 0;
