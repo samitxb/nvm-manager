@@ -13,7 +13,6 @@ void NVM_IntegrityCheck(NVMManager* manager) {
             // Record existiert nicht
             continue;
         }
-
         // Lese Record
         NVMRecord record;
         memcpy(&record.data, &manager->nvm_data[info->start], info->length);

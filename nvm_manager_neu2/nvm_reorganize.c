@@ -35,5 +35,5 @@ void NVM_ReorganizeRecords(NVMManager* manager) {
         manager->nvm_data[i] = tempNVM[i];
     }
 
-    updateAllocTable(manager);
+    //updateAllocTable(manager);
 }
