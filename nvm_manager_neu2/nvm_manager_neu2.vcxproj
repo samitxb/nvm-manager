@@ -144,6 +144,7 @@
     <ClInclude Include="nvm_add.h" />
     <ClInclude Include="nvm_asyncrw.h" />
     <ClInclude Include="nvm_del.h" />
+    <ClInclude Include="nvm_demoapplikation.h" />
     <ClInclude Include="nvm_reorganize.h" />
     <ClInclude Include="nvm_syncrw.h" />
     <ClInclude Include="resizeAllocTable.h" />

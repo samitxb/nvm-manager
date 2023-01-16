@@ -36,6 +36,18 @@
     <ClCompile Include="nvm_integretycheck.c">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="demoapplikation.c">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="nvm_reorganize.c">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="resizeAllocTable.c">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="updateAllocTable.c">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="nvm_add.h">
@@ -54,6 +66,18 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="nvm_asyncrw.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="nvm_reorganize.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="resizeAllocTable.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="updateAllocTable.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="nvm_demoapplikation.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
