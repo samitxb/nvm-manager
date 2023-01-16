@@ -149,6 +149,10 @@ int main() {
 	{
 		Sleep(1);
 	}
-    return 0;
+    
+
+	int ret = NVM_demoapplikation();
+	return ret;
+
 }
 
