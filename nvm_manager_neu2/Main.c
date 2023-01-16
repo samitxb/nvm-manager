@@ -16,6 +16,7 @@
 
 
 int main() {
-	NVM_demoapplikation();
+	int ret = NVM_demoapplikation();
+	return ret;
 }
 
