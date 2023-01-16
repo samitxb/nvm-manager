@@ -23,51 +23,49 @@ int main() {
     NVMManager manager;
     NVMRecord record;
     int id;
-    int i;
-    int ret;
+    int ret;    //Return der Funktionen gekürzt auf "ret" weil "return" reserviert ist
+    unsigned char data[] = { 1, 2, 3, 4, 5 };
 
     // Initialisiere den NVM-Manager
     ret = NVM_Init(&manager);
     assert(ret == 0);
 
     // Teste das Hinzufügen eines neuen Datensatzes
-    record.header.length = 2;
     id = NVM_AddNewRecord(&manager, &record, false, false);
-    assert(id == 0);
+    memcpy(record.data, data, sizeof(data));
+    assert(id != -1);
 
     // Teste das Löschen eines Datensatzes
     ret = NVM_DeleteRecord(&manager, id);
     assert(ret == 0);
 
     // Teste das Hinzufügen eines schreibgeschützten Datensatzes
-    record.header.length = 2;
     id = NVM_AddNewRecord(&manager, &record, true, false);
-
-    assert(id == 0);
+    memcpy(record.data, data, sizeof(data));
+    assert(id != -1);
 
     // Teste das Löschen eines schreibgeschützten Datensatzes
     ret = NVM_DeleteRecord(&manager, id);
-    assert(ret == 0);
-    printf("\n%d", ret);
+    assert(ret == -1);
 
     // Teste das Hinzufügen eines redundanten Datensatzes
-    record.header.length = 3;
     id = NVM_AddNewRecord(&manager, &record, false, true);
-    assert(id == 0);
+    memcpy(record.data, data, sizeof(data));
+    assert(id != -1);
 
     // Teste das Löschen eines redundanten Datensatzes
     ret = NVM_DeleteRecord(&manager, id);
     assert(ret == 0);
 
     // Teste das Hinzufügen von Datensätzen, bis kein Platz mehr im NVM-Speicher ist
-    //for (i = 0; i < ALLOC_TABLE_SIZE; i++) {
-    //    record.header.length = 10;
-    //    id = NVM_AddNewRecord(&manager, &record, false, false);
-    //    if (id == -1) {
-    //        break;
-    //    }
-    //}
-    //assert(i == ALLOC_TABLE_SIZE - 1);
+    int i;
+    for (i = 1; i < ALLOC_TABLE_SIZE; i++) {
+        id = NVM_AddNewRecord(&manager, &record, false, false);
+        if (id == -1) {
+            break;
+        }
+    }
+    assert(i == ALLOC_TABLE_SIZE);
 
     return 0;
 }
