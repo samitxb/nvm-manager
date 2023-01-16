@@ -14,6 +14,16 @@
 #include "updateAllocTable.h"
 
 
+/*typedef struct createRecord(unsigned char data) {
+
+	NVMRecord record = {
+		//.header.id = 0,
+		.header.length = sizeof(data)
+	};
+
+	return record;
+};*/
+
 
 int main() {
 	printf("\033[0;37m");
@@ -24,25 +34,14 @@ int main() {
 
 	//Neuer Record
 	unsigned char data1[] = { 1, 2, 3, 4, 5 };
-	NVMRecord record1 = {
-		//.header.id = 0,
-		.header.length = sizeof(data1)
-	};	
-	unsigned char data2[] = { 1, 2, 3, 4, 5, 6 , 7};
-	NVMRecord record2 = {
-		//.header.id = 1,
-		.header.length = sizeof(data2)
-	};
+	unsigned char data2[] = { 1, 2, 3, 4, 5, 6 , 7 };
 	unsigned char data3[] = { 1, 2, 3, 4, 5 };
-	NVMRecord record3 = {
-		//.header.id = 2,
-		.header.length = sizeof(data3)
-	};
 	unsigned char data4[] = { 1, 2, 3, 4, 5 };
-	NVMRecord record4 = {
-		//.header.id = 2,
-		.header.length = sizeof(data4)
-	};
+
+	NVMRecord record1 = { .header.length = sizeof(data1) };	
+	NVMRecord record2 = { .header.length = sizeof(data2) };
+	NVMRecord record3 = { .header.length = sizeof(data3) };
+	NVMRecord record4 = { .header.length = sizeof(data4) };
 
 	// To ADDRecord manger record & readonly & redundant
 	int id1 = NVM_AddNewRecord(&manager, &record1, 0, 0);
@@ -67,7 +66,6 @@ int main() {
 	NVM_SyncReadRecord(&manager, &record4);
 
 
-
 	for (int i = 0; i < 11; i++)
 	{
 		NVM_Handler(&manager, i, 0);
@@ -76,7 +74,7 @@ int main() {
 	}
 	 
 	//Testsequenz für reorg funktion
-	printf("\n\n\033[0;36m Testsequenz für resizeAllocTable(): \n\033[0;37m");
+	//printf("\n\n\033[0;36m Testsequenz für resizeAllocTable(): \n\033[0;37m");
 
 	//NVM_DeleteRecord(&manager, id2);
 	//NVM_ReorganizeRecords(&manager);
@@ -86,10 +84,7 @@ int main() {
 	//NVM_ReorganizeRecords(&manager);
 
 
-
-
-
-	// Lösche Record
+	// Lösche Records
 	NVM_DeleteRecord(&manager, id1);
 	NVM_DeleteRecord(&manager, id2);
 	NVM_DeleteRecord(&manager, id3);
