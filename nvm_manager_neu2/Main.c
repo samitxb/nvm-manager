@@ -27,14 +27,22 @@ int main() {
 	NVMRecord record1 = {
 		//.header.id = 0,
 		.header.length = sizeof(data1)
-	};
-	
+	};	
 	unsigned char data2[] = { 1, 2, 3, 4, 5, 6 , 7};
 	NVMRecord record2 = {
 		//.header.id = 1,
 		.header.length = sizeof(data2)
 	};
-	
+	unsigned char data3[] = { 1, 2, 3, 4, 5 };
+	NVMRecord record3 = {
+		//.header.id = 2,
+		.header.length = sizeof(data3)
+	};
+	unsigned char data4[] = { 1, 2, 3, 4, 5 };
+	NVMRecord record4 = {
+		//.header.id = 2,
+		.header.length = sizeof(data4)
+	};
 
 	// To ADDRecord manger record & readonly & redundant
 	int id1 = NVM_AddNewRecord(&manager, &record1, 0, 0);
@@ -48,11 +56,9 @@ int main() {
 	NVM_SyncReadRecord(&manager, &record1);
 	NVM_SyncReadRecord(&manager, &record2);
 	printf("Daten vom Record1:\n");
-
 	for (int i = 0; i < sizeof(data1); i++) {
 		printf("%d ", record1.data[i]);
 	}
-
 	printf("\n");
 	printf("Daten vom Record2:\n");
 	for (int i = 0; i < sizeof(data2); i++) {
@@ -60,14 +66,7 @@ int main() {
 	}
 	printf("\n");
 
-
-
-	//Record für Redundanz
-	unsigned char data3[] = { 1, 2, 3, 4, 5, 6 , 7, 8 };
-	NVMRecord record3 = {
-		//.header.id = 2,
-		.header.length = sizeof(data3)
-	};
+	//Redundanz test
 	int id3 = NVM_AddNewRecord(&manager, &record3, 0, 1);
 	NVM_SyncWriteRecord(&manager, &record3, data3);
 	NVM_SyncReadRecord(&manager, &record3);
@@ -75,6 +74,11 @@ int main() {
 	for (int i = 0; i < sizeof(data3); i++) {
 	printf("%d ", record3.data[i]);
 	}
+	printf("\n");
+
+	//Readonly test
+	//int id4 = NVM_AddNewRecord(&manager, &record4, 1, 0);
+	//NVM_SyncWriteRecord(&manager, &record4, data4);
 
 
 	for (int i = 0; i < 11; i++)
@@ -90,7 +94,7 @@ int main() {
 	NVM_DeleteRecord(&manager, id2);
 	NVM_ReorganizeRecords(&manager);
 
-	int id4 = NVM_AddNewRecord(&manager, &record1, 0, 0);
+	int id5 = NVM_AddNewRecord(&manager, &record1, 0, 0);
 
 	NVM_ReorganizeRecords(&manager);
 

@@ -9,9 +9,6 @@
 // Fügt einen neuen Record hinzu und gibt die zugehörige ID zurück
 int NVM_AddNewRecord(NVMManager* manager, NVMRecord* record, bool readonly, bool redundant) {
 
-    int length = record->header.length;
-    printf("length: %d\n", length);
-
     //Suche nach einem freien Platz in der Allokationstabelle
     int id = -1;
     for (int i = 0; i < ALLOC_TABLE_SIZE; i++) {
@@ -28,6 +25,7 @@ int NVM_AddNewRecord(NVMManager* manager, NVMRecord* record, bool readonly, bool
 
     //Suche nach einem freien Platz im NVM-Speicher
     int start = -1;
+    int length = record->header.length;
     for (int i = 0; i < NVM_SIZE - length; i++) {
         bool free = 1;
         for (int j = i; j < i + length; j++) {
@@ -46,7 +44,7 @@ int NVM_AddNewRecord(NVMManager* manager, NVMRecord* record, bool readonly, bool
         return -1;
     }
 
-    // Füge Record hinzu
+    // Füge Record in die Allokationstabelle hinzu
     NVMRecordInfo* info = &manager->allocTable[id];
     info->id = id;
     info->start = start;
@@ -60,12 +58,10 @@ int NVM_AddNewRecord(NVMManager* manager, NVMRecord* record, bool readonly, bool
     info->valid = 1;
     info->checksum = 0;
 
-    //Setzt Speicherbereich auf FF (reservierung?) sollte eigentlich nicht implementiert werden    
+    //Setzt Speicherbereich auf FF (reservierung?) 
     for (int i = start; i < start + length; i++) {
         manager->nvm_data[i] = 0xff;
     }
-    //memcpy(&manager->nvm_data[info->start], record, info->length);
-
     //Setzt Speicherbereich auf FF (reservierung?) falls redundant
     if (info->redundant) {
         for (int i = start; i < info->redundancy_start + length; i++) {

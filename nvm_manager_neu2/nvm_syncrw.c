@@ -83,7 +83,10 @@ int NVM_SyncReadRecord(NVMManager* manager, NVMRecord* record) {
 
     if (info->redundant) {
         // Lese redundanten Record
-        NVMRecord redundantRecord;
+        NVMRecord redundantRecord = {
+            .header.id = 0,
+            .header.length = 0
+        };
         memcpy(&redundantRecord.data, &manager->nvm_data[info->redundancy_start], info->length);
 
         unsigned char checksum2 = NVM_CalculateChecksum(redundantRecord.data, info->length);
@@ -95,6 +98,8 @@ int NVM_SyncReadRecord(NVMManager* manager, NVMRecord* record) {
             return -1;
         }
     }
+
+
 
     return 0;
 }
