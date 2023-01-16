@@ -29,7 +29,6 @@ int NVM_SyncWriteRecord(NVMManager* manager, NVMRecord* record, unsigned char* d
     }
     // Berechne Checksumme
     unsigned char checksum1 = NVM_CalculateChecksum(data, info->length);
-    printf("Checksum Write2= %d\n", checksum1);
     record->checksum = checksum1;
 
     // Schreibe den Record im NVM-Speicher
@@ -41,7 +40,6 @@ int NVM_SyncWriteRecord(NVMManager* manager, NVMRecord* record, unsigned char* d
     // Wenn der Record redundant gespeichert werden soll, speichere ihn noch einmal hintereinander ab
     if (info->redundant) {
         unsigned char checksum2 = NVM_CalculateChecksum(data, info->length);
-        printf("Checksum Write2 Redundant = %d\n", checksum1);
         if (checksum1 != checksum2) {
             printf("Unterschiedliche LRCs bei Berechnung");
             info->valid = 0;
@@ -60,6 +58,8 @@ int NVM_SyncWriteRecord(NVMManager* manager, NVMRecord* record, unsigned char* d
     //Setzt falls nötig das endgültige readonly flag
     info->readonly = info->readonly_first;
 
+    printf("Record & Daten mit der ID: %d erfolgreich in den NVM-Speicher geschrieben!\n", id);
+
     return 0;
 }
 
@@ -75,9 +75,7 @@ int NVM_SyncReadRecord(NVMManager* manager, NVMRecord* record) {
 
     //Lese Record aus NVM_Data & schreibe in record.data
     memcpy(record->data, &manager->nvm_data[info->start], info->length);
-
     unsigned char checksum1 = NVM_CalculateChecksum(record->data, info->length);
-    printf("Checksum Read2 %d\n", checksum1);
 
     if (checksum1 != info->checksum) {
         printf("Checksummen-Fehler\n");
@@ -93,7 +91,6 @@ int NVM_SyncReadRecord(NVMManager* manager, NVMRecord* record) {
         memcpy(&redundantRecord.data, &manager->nvm_data[info->redundancy_start], info->length);
 
         unsigned char checksum2 = NVM_CalculateChecksum(redundantRecord.data, info->length);
-        printf("Checksum Read2 Redundant %d\n", checksum2);
         // Vergleiche Checksummen
         if (checksum1 != checksum2) {
             // Checksummen sind unterschiedlich
@@ -102,8 +99,11 @@ int NVM_SyncReadRecord(NVMManager* manager, NVMRecord* record) {
         }
     }
 
-
-
+    printf("Gelesene Daten von Record %d:\n", id);
+    for (int i = 0; i < info->length; i++) {
+        printf("%d ", record->data[i]);
+    }
+    printf("\n");
     return 0;
 }
 

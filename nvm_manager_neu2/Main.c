@@ -55,36 +55,18 @@ int main() {
 	//Read Record
 	NVM_SyncReadRecord(&manager, &record1);
 	NVM_SyncReadRecord(&manager, &record2);
-	printf("Daten vom Record1:\n");
-	for (int i = 0; i < sizeof(data1); i++) {
-		printf("%d ", record1.data[i]);
-	}
-	printf("\n");
-	printf("Daten vom Record2:\n");
-	for (int i = 0; i < sizeof(data2); i++) {
-		printf("%d ", record2.data[i]);
-	}
-	printf("\n");
 
 	//Redundanz test
 	int id3 = NVM_AddNewRecord(&manager, &record3, 0, 1);
 	NVM_SyncWriteRecord(&manager, &record3, data3);
 	NVM_SyncReadRecord(&manager, &record3);
-	printf("Daten vom Record3: \n ");
-	for (int i = 0; i < sizeof(data3); i++) {
-	printf("%d ", record3.data[i]);
-	}
-	printf("\n");
 
 	//Readonly test
 	int id4 = NVM_AddNewRecord(&manager, &record4, 1, 0);
 	NVM_SyncWriteRecord(&manager, &record4, data4);
 	NVM_SyncReadRecord(&manager, &record4);
-	printf("Daten vom Record4: \n ");
-	for (int i = 0; i < sizeof(data4); i++) {
-		printf("%d ", record4.data[i]);
-	}
-	printf("\n");
+
+
 
 	for (int i = 0; i < 11; i++)
 	{
@@ -115,3 +97,27 @@ int main() {
 
 	return 0;
 }
+
+
+/*	printf("Daten vom Record1:\n");
+for (int i = 0; i < sizeof(data1); i++) {
+	printf("%d ", record1.data[i]);
+}
+printf("\n");
+printf("Daten vom Record2:\n");
+for (int i = 0; i < sizeof(data2); i++) {
+	printf("%d ", record2.data[i]);
+}
+printf("\n");
+printf("Daten vom Record3: \n ");
+	for (int i = 0; i < sizeof(data3); i++) {
+	printf("%d ", record3.data[i]);
+	}
+	printf("\n");
+
+	printf("Daten vom Record4: \n ");
+	for (int i = 0; i < sizeof(data4); i++) {
+		printf("%d ", record4.data[i]);
+	}
+	printf("\n");
+*/

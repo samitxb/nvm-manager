@@ -14,7 +14,6 @@ int NVM_AddNewRecord(NVMManager* manager, NVMRecord* record, bool readonly, bool
     for (int i = 0; i < ALLOC_TABLE_SIZE; i++) {
         if (!manager->allocTable[i].used) {
             id = i;
-            printf("ID: %d\n", id);
             break;
         }
     }
@@ -68,6 +67,8 @@ int NVM_AddNewRecord(NVMManager* manager, NVMRecord* record, bool readonly, bool
             manager->nvm_data[i] = 0xff;
         }
     }
+
+    printf("Record mit der ID: %d erfolgreich erstellt!\n", id);
 
     record->header.id = id;
     return id;
