@@ -2,4 +2,4 @@
 
 #include "typedef.h"
 
-void NVM_DeleteRecord(NVMManager* manager, int id);
+int NVM_DeleteRecord(NVMManager* manager, int id);

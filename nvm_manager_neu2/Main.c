@@ -78,12 +78,12 @@ int main() {
 	//Testsequenz für reorg funktion
 	printf("\n\n\033[0;36m Testsequenz für resizeAllocTable(): \n\033[0;37m");
 
-	NVM_DeleteRecord(&manager, id2);
-	NVM_ReorganizeRecords(&manager);
+	//NVM_DeleteRecord(&manager, id2);
+	//NVM_ReorganizeRecords(&manager);
 
-	int id5 = NVM_AddNewRecord(&manager, &record1, 0, 0);
+	//int id5 = NVM_AddNewRecord(&manager, &record1, 0, 0);
 
-	NVM_ReorganizeRecords(&manager);
+	//NVM_ReorganizeRecords(&manager);
 
 
 
@@ -93,31 +93,11 @@ int main() {
 	NVM_DeleteRecord(&manager, id1);
 	NVM_DeleteRecord(&manager, id2);
 	NVM_DeleteRecord(&manager, id3);
+	NVM_DeleteRecord(&manager, id4);
 
-
+	while (!_kbhit())
+	{
+		Sleep(1);
+	}
 	return 0;
 }
-
-
-/*	printf("Daten vom Record1:\n");
-for (int i = 0; i < sizeof(data1); i++) {
-	printf("%d ", record1.data[i]);
-}
-printf("\n");
-printf("Daten vom Record2:\n");
-for (int i = 0; i < sizeof(data2); i++) {
-	printf("%d ", record2.data[i]);
-}
-printf("\n");
-printf("Daten vom Record3: \n ");
-	for (int i = 0; i < sizeof(data3); i++) {
-	printf("%d ", record3.data[i]);
-	}
-	printf("\n");
-
-	printf("Daten vom Record4: \n ");
-	for (int i = 0; i < sizeof(data4); i++) {
-		printf("%d ", record4.data[i]);
-	}
-	printf("\n");
-*/

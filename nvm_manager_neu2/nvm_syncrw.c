@@ -24,7 +24,7 @@ int NVM_SyncWriteRecord(NVMManager* manager, NVMRecord* record, unsigned char* d
 
     // Prüfe, ob der Record existiert und schreibbar ist
     if (id < 0 || id >= ALLOC_TABLE_SIZE || !info->used || info->readonly) {
-        printf("Ungültige ID oder Record ist schreibgeschützt\n");
+        printf("Ungueltige ID oder Record ist schreibgeschuetzt\n");
         return -1;
     }
     // Berechne Checksumme
