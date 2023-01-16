@@ -48,6 +48,9 @@
     <ClCompile Include="updateAllocTable.c">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="testfunktion.c">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="nvm_add.h">
@@ -78,6 +81,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="nvm_demoapplikation.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="testfunktion.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

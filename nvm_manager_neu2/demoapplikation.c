@@ -11,7 +11,6 @@
 #include "nvm_syncrw.h"
 #include "nvm_asyncrw.h"
 #include "nvm_reorganize.h"
-#include "nvm_demoapplikation.h"
 
 int NVM_demoapplikation() {
     NVMManager manager;
