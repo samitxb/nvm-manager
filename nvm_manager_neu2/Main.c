@@ -77,9 +77,14 @@ int main() {
 	printf("\n");
 
 	//Readonly test
-	//int id4 = NVM_AddNewRecord(&manager, &record4, 1, 0);
-	//NVM_SyncWriteRecord(&manager, &record4, data4);
-
+	int id4 = NVM_AddNewRecord(&manager, &record4, 1, 0);
+	NVM_SyncWriteRecord(&manager, &record4, data4);
+	NVM_SyncReadRecord(&manager, &record4);
+	printf("Daten vom Record4: \n ");
+	for (int i = 0; i < sizeof(data4); i++) {
+		printf("%d ", record4.data[i]);
+	}
+	printf("\n");
 
 	for (int i = 0; i < 11; i++)
 	{

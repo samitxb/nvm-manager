@@ -57,6 +57,9 @@ int NVM_SyncWriteRecord(NVMManager* manager, NVMRecord* record, unsigned char* d
     info->valid = 1;
     info->checksum = checksum1;
 
+    //Setzt falls nötig das endgültige readonly flag
+    info->readonly = info->readonly_first;
+
     return 0;
 }
 

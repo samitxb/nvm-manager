@@ -29,6 +29,7 @@ typedef struct {
     int length; // Länge des Records
     bool used; // Flag, ob der Record genutzt wird
     bool readonly; // Flag, ob der Record schreibgeschützt ist
+    bool readonly_first; // Flag, ob der Record schreibgeschützt ist
     bool redundant; // Flag, ob der Record redundant gespeichert wird
     int redundancy_start; // Startposition des Redundanzblocks
     bool valid; // Flag, ob der Record valide ist
