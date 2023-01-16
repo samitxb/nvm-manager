@@ -15,7 +15,7 @@ void NVM_IntegrityCheck(NVMManager* manager) {
         }
         // Lese Record
         NVMRecord record;
-        memcpy(&record.data, &manager->nvm_data[info->start], info->length);
+        memcpy(&record.data, &manager->nvmData[info->start], info->length);
 
         // Prüfe Checksumme
         if (info->checksum != NVM_CalculateChecksum(&record.data, info->length)) {

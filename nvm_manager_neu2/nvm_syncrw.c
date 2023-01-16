@@ -7,55 +7,64 @@
 
 
 // Berechnet die LRC (byteweise XOR Verknüpfung aller Datenbytes) eines Records
-unsigned char NVM_CalculateChecksum(unsigned char* data, int data_size) {
-    unsigned char lrc = 0;
-    for (int i = 0; i < data_size; i++) {
-        lrc ^= data[i];
+unsigned char NVM_CalculateChecksum(unsigned char* data, int dataSize) {
+
+    unsigned char checksum = 0;
+    for (int i = 0; i < dataSize; i++) {
+        checksum ^= data[i];
     }
-    return lrc;
+    return checksum;
 }
 
 
 // Synchrones Schreiben eines Records
-int NVM_SyncWriteRecord(NVMManager* manager, NVMRecord* record, unsigned char* data) {
+int NVM_SyncWriteRecord(NVMManager* manager, NVMRecord* record) {
 
     int id = record->header.id;
     NVMRecordInfo* info = &manager->allocTable[id];
+
     // Prüfe, ob der Record existiert und schreibbar ist
-    if (id < 0 || id >= NVM_SIZE || !info->used || info->readonly) {
-        printf("Ungültige ID oder Record ist schreibgeschützt\n");
+    if (id < 0 || id >= ALLOC_TABLE_SIZE || !info->used || info->readonly) {
+        printf("Ungueltige ID oder Record ist schreibgeschuetzt\n");
         return -1;
     }
     // Berechne Checksumme
-    unsigned char lrc1 = NVM_CalculateChecksum(data, info->length);
-    printf("Checksum Write2= %d\n", lrc1);
-    record->checksum = lrc1;
+    unsigned char checksum1 = NVM_CalculateChecksum(record->data, info->length);
+    record->checksum = checksum1;
 
     // Schreibe den Record im NVM-Speicher
     int start = info->start;
     for (int i = 0; i < info->length; i++) {
-        manager->nvm_data[start + i] = data[i];
+        manager->nvmData[start + i] = record->data[i];
     }
 
     // Wenn der Record redundant gespeichert werden soll, speichere ihn noch einmal hintereinander ab
     if (info->redundant) {
-        unsigned char lrc2 = NVM_CalculateChecksum(data, info->length);
-        printf("Checksum Write2 Redundant = %d\n", lrc1);
-        if (lrc1 != lrc2) {
-            printf("Unterschiedliche LRCs bei Berechnung");
+        unsigned char checksum2 = NVM_CalculateChecksum(record->data, info->length);
+        if (checksum1 != checksum2) {
+            printf("Unterschiedliche LRCs bei Berechnung!\n");
             info->valid = 0;
             return -1;
         }
-        start = info->redundancy_start;
+        start = info->redundancyStart;
         for (int i = 0; i < info->length; i++) {
-            manager->nvm_data[start + i] = data[i];
+            manager->nvmData[start + i] = record->data[i];
         }
     }
 
     // Setze das Validitätsflag und die Checksum
     info->valid = 1;
-    info->checksum = lrc1;
+    info->checksum = checksum1;
 
+    //Setzt falls nötig das endgültige readonly flag
+    info->readonly = info->readonlyFirst;
+
+    // Löscht die Daten aus dem Record
+    for (int i = 0; i < info->length; i++) {
+        record->data[i] = 0;
+    }
+
+    printf("Record & Daten mit der ID: %d erfolgreich in den NVM-Speicher geschrieben!\n", id);
     return 0;
 }
 
@@ -70,31 +79,36 @@ int NVM_SyncReadRecord(NVMManager* manager, NVMRecord* record) {
     }
 
     //Lese Record aus NVM_Data & schreibe in record.data
-    memcpy(record->data, &manager->nvm_data[info->start], info->length);
+    memcpy(record->data, &manager->nvmData[info->start], info->length);
+    unsigned char checksum1 = NVM_CalculateChecksum(record->data, info->length);
 
-    unsigned char lrc1 = NVM_CalculateChecksum(record->data, info->length);
-    printf("Checksum Read2 %d\n", lrc1);
-
-    if (lrc1 != info->checksum) {
-        printf("LRC-Fehler\n");
+    if (checksum1 != info->checksum) {
+        printf("Checksummen-Fehler\n");
         return -1;
     }
 
     if (info->redundant) {
         // Lese redundanten Record
-        NVMRecord redundantRecord;
-        memcpy(&redundantRecord.data, &manager->nvm_data[info->redundancy_start], info->length);
+        NVMRecord redundantRecord = {
+            .header.id = 0,
+            .header.length = 0
+        };
+        memcpy(&redundantRecord.data, &manager->nvmData[info->redundancyStart], info->length);
 
-        unsigned char lrc2 = NVM_CalculateChecksum(redundantRecord.data, info->length);
-        printf("Checksum Read2 Redundant %d\n", lrc2);
+        unsigned char checksum2 = NVM_CalculateChecksum(redundantRecord.data, info->length);
         // Vergleiche Checksummen
-        if (lrc1 != lrc2) {
+        if (checksum1 != checksum2) {
             // Checksummen sind unterschiedlich
-            printf("LRCs im redundant gespeicherten Record unterschiedlich\n");
+            printf("Checksummen im redundant gespeicherten Record unterschiedlich\n");
             return -1;
         }
     }
 
+    printf("Gelesene Daten von Record %d:\n", id);
+    for (int i = 0; i < info->length; i++) {
+        printf("%d ", record->data[i]);
+    }
+    printf("\n");
     return 0;
 }
 

@@ -111,7 +111,7 @@ int NVM_Handler(NVMManager* manager, int id, NVMRecord* record, NVMWriteCallback
         // Überprüfe, ob der Record redundant gespeichert ist
         if (infoAlloc->redundant) {
             NVMRecord redundantRecord;
-            memcpy(&redundantRecord, &manager->nvm_data[infoAlloc->redundant], infoAlloc->length);
+            memcpy(&redundantRecord, &manager->nvmData[infoAlloc->redundant], infoAlloc->length);
 
             // Vergleiche Checksummen
             if (record->checksum != redundantRecord.checksum) {
