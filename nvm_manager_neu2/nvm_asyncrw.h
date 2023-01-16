@@ -2,8 +2,8 @@
 
 #include "typedef.h"
 
-void NVM_AsyncWriteRecord(NVMManager* manager, int id, unsigned char* data, NVMRecord* record);
+int NVM_AsyncWriteRecord(NVMManager* manager, int id, unsigned char* data, NVMRecord* record, NVMWriteCallback callback);
 
-int NVM_AsyncReadRecord(NVMManager* manager, int id, unsigned char* data, NVMRecord* record);
+int NVM_AsyncReadRecord(NVMManager* manager, int id, unsigned char* data, NVMRecord* record, NVMWriteCallback callback);
 
-void NVM_Handler(NVMManager* manager, int id, NVMWriteCallback* callback);
+int NVM_Handler(NVMManager* manager, int id, unsigned char* data, NVMRecord* record, NVMWriteCallback callback);
