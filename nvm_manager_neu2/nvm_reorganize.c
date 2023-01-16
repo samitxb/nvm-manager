@@ -7,7 +7,7 @@
 #include "resizeAllocTable.h"
 #include "updateAllocTable.h"
 
-void NVM_ReorganizeRecords(NVMManager* manager) {
+int NVM_ReorganizeRecords(NVMManager* manager) {
     int i, j;
 
     // Erstelle temporäres NVM-Speicher-Array
@@ -34,6 +34,5 @@ void NVM_ReorganizeRecords(NVMManager* manager) {
     for (i = 0; i < NVM_SIZE; i++) {
         manager->nvmData[i] = tempNVM[i];
     }
-
-    //updateAllocTable(manager);
+    return 0;
 }

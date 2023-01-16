@@ -16,57 +16,6 @@
 
 
 int main() {
-	// Initialisiere NVM Manager
-	//NVMManager manager;
-	//NVM_demoapplikation(&manager);
-
-    NVMManager manager;
-    NVMRecord record;
-    int id;
-    int ret;    //Return der Funktionen gekürzt auf "ret" weil "return" reserviert ist
-    unsigned char data[] = { 1, 2, 3, 4, 5 };
-
-    // Initialisiere den NVM-Manager
-    ret = NVM_Init(&manager);
-    assert(ret == 0);
-
-    // Teste das Hinzufügen eines neuen Datensatzes
-    id = NVM_AddNewRecord(&manager, &record, false, false);
-    memcpy(record.data, data, sizeof(data));
-    assert(id != -1);
-
-    // Teste das Löschen eines Datensatzes
-    ret = NVM_DeleteRecord(&manager, id);
-    assert(ret == 0);
-
-    // Teste das Hinzufügen eines schreibgeschützten Datensatzes
-    id = NVM_AddNewRecord(&manager, &record, true, false);
-    memcpy(record.data, data, sizeof(data));
-    assert(id != -1);
-
-    // Teste das Löschen eines schreibgeschützten Datensatzes
-    ret = NVM_DeleteRecord(&manager, id);
-    assert(ret == -1);
-
-    // Teste das Hinzufügen eines redundanten Datensatzes
-    id = NVM_AddNewRecord(&manager, &record, false, true);
-    memcpy(record.data, data, sizeof(data));
-    assert(id != -1);
-
-    // Teste das Löschen eines redundanten Datensatzes
-    ret = NVM_DeleteRecord(&manager, id);
-    assert(ret == 0);
-
-    // Teste das Hinzufügen von Datensätzen, bis kein Platz mehr im NVM-Speicher ist
-    int i;
-    for (i = 1; i < ALLOC_TABLE_SIZE; i++) {
-        id = NVM_AddNewRecord(&manager, &record, false, false);
-        if (id == -1) {
-            break;
-        }
-    }
-    assert(i == ALLOC_TABLE_SIZE);
-
-    return 0;
+	NVM_demoapplikation();
 }
 
