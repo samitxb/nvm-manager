@@ -29,9 +29,9 @@ typedef struct {
     int length; // Länge des Records
     bool used; // Flag, ob der Record genutzt wird
     bool readonly; // Flag, ob der Record schreibgeschützt ist
-    bool readonly_first; // Flag, ob der Record schreibgeschützt ist
+    bool readonlyFirst; // Flag, ob der Record schreibgeschützt ist
     bool redundant; // Flag, ob der Record redundant gespeichert wird
-    int redundancy_start; // Startposition des Redundanzblocks
+    int redundancyStart; // Startposition des Redundanzblocks
     bool valid; // Flag, ob der Record valide ist
     unsigned char checksum;
 } NVMRecordInfo;
@@ -41,7 +41,7 @@ typedef void (*NVMWriteCallback)(int status);
 // Struktur für den NVM-Manager
 typedef struct {
     NVMRecordInfo allocTable[ALLOC_TABLE_SIZE]; // Allokationstabelle
-    unsigned char nvm_data[NVM_SIZE]; // NVM-Speicher
+    unsigned char nvmData[NVM_SIZE]; // NVM-Speicher
     int queue[QUEUE_SIZE]; // Asynchrone Schreib-/Lesewarteschlange
     int queueStart; // Startposition der Warteschlange
     int queueEnd; // Endposition der Warteschlange

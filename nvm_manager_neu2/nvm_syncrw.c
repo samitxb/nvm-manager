@@ -34,20 +34,20 @@ int NVM_SyncWriteRecord(NVMManager* manager, NVMRecord* record, unsigned char* d
     // Schreibe den Record im NVM-Speicher
     int start = info->start;
     for (int i = 0; i < info->length; i++) {
-        manager->nvm_data[start + i] = data[i];
+        manager->nvmData[start + i] = data[i];
     }
 
     // Wenn der Record redundant gespeichert werden soll, speichere ihn noch einmal hintereinander ab
     if (info->redundant) {
         unsigned char checksum2 = NVM_CalculateChecksum(data, info->length);
         if (checksum1 != checksum2) {
-            printf("Unterschiedliche LRCs bei Berechnung");
+            printf("Unterschiedliche LRCs bei Berechnung!\n");
             info->valid = 0;
             return -1;
         }
-        start = info->redundancy_start;
+        start = info->redundancyStart;
         for (int i = 0; i < info->length; i++) {
-            manager->nvm_data[start + i] = data[i];
+            manager->nvmData[start + i] = data[i];
         }
     }
 
@@ -56,10 +56,9 @@ int NVM_SyncWriteRecord(NVMManager* manager, NVMRecord* record, unsigned char* d
     info->checksum = checksum1;
 
     //Setzt falls nötig das endgültige readonly flag
-    info->readonly = info->readonly_first;
+    info->readonly = info->readonlyFirst;
 
     printf("Record & Daten mit der ID: %d erfolgreich in den NVM-Speicher geschrieben!\n", id);
-
     return 0;
 }
 
@@ -74,7 +73,7 @@ int NVM_SyncReadRecord(NVMManager* manager, NVMRecord* record) {
     }
 
     //Lese Record aus NVM_Data & schreibe in record.data
-    memcpy(record->data, &manager->nvm_data[info->start], info->length);
+    memcpy(record->data, &manager->nvmData[info->start], info->length);
     unsigned char checksum1 = NVM_CalculateChecksum(record->data, info->length);
 
     if (checksum1 != info->checksum) {
@@ -88,7 +87,7 @@ int NVM_SyncReadRecord(NVMManager* manager, NVMRecord* record) {
             .header.id = 0,
             .header.length = 0
         };
-        memcpy(&redundantRecord.data, &manager->nvm_data[info->redundancy_start], info->length);
+        memcpy(&redundantRecord.data, &manager->nvmData[info->redundancyStart], info->length);
 
         unsigned char checksum2 = NVM_CalculateChecksum(redundantRecord.data, info->length);
         // Vergleiche Checksummen

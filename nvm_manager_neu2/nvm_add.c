@@ -28,7 +28,7 @@ int NVM_AddNewRecord(NVMManager* manager, NVMRecord* record, bool readonly, bool
     for (int i = 0; i < NVM_SIZE - length; i++) {
         bool free = 1;
         for (int j = i; j < i + length; j++) {
-            if (manager->nvm_data[j] != 0) {  
+            if (manager->nvmData[j] != 0) {  
                 free = 0;
                 break;
             }
@@ -49,22 +49,22 @@ int NVM_AddNewRecord(NVMManager* manager, NVMRecord* record, bool readonly, bool
     info->start = start;
     info->length = length;
     info->used = 1;
-    info->readonly_first = readonly;
+    info->readonlyFirst = readonly;
     info->redundant = redundant;
     if (redundant) {
-        info->redundancy_start = start + length;
+        info->redundancyStart = start + length;
     }
     info->valid = 1;
     info->checksum = 0;
 
     //Setzt Speicherbereich auf FF (reservierung?) 
     for (int i = start; i < start + length; i++) {
-        manager->nvm_data[i] = 0xff;
+        manager->nvmData[i] = 0xff;
     }
     //Setzt Speicherbereich auf FF (reservierung?) falls redundant
     if (info->redundant) {
-        for (int i = start; i < info->redundancy_start + length; i++) {
-            manager->nvm_data[i] = 0xff;
+        for (int i = start; i < info->redundancyStart + length; i++) {
+            manager->nvmData[i] = 0xff;
         }
     }
 

@@ -18,17 +18,17 @@ int NVM_DeleteRecord(NVMManager* manager, int id) {
 
     // Setze den Speicherbereich des Records auf FF und markiere den Record als unbenutzt
     for (int i = info->start; i < info->start + info->length; i++) {
-        manager->nvm_data[i] = 0xff;
+        manager->nvmData[i] = 0xff;
     }
     if (info->redundant) {
-        for (int i = info->redundancy_start; i < info->redundancy_start + info->length; i++) {
-            manager->nvm_data[i] = 0xff;
+        for (int i = info->redundancyStart; i < info->redundancyStart + info->length; i++) {
+            manager->nvmData[i] = 0xff;
         }
     }
     info->used = 0;
     info->readonly = 0;
     info->redundant = 0;
-    info->redundancy_start = 0;
+    info->redundancyStart = 0;
     info->valid = 0;
     info->id = 0;
     info->length = 0;

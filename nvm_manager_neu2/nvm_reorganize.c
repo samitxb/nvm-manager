@@ -22,7 +22,7 @@ void NVM_ReorganizeRecords(NVMManager* manager) {
         if (manager->allocTable[i].used) {
             // Kopiere den Record-Datenblock in den temporären NVM-Speicher
             for (j = 0; j < manager->allocTable[i].length; j++) {
-                tempNVM[currentPos + j] = manager->nvm_data[manager->allocTable[i].start + j];
+                tempNVM[currentPos + j] = manager->nvmData[manager->allocTable[i].start + j];
             }
             // Aktualisiere die Startposition des Records im AllocTable
             manager->allocTable[i].start = currentPos;
@@ -32,7 +32,7 @@ void NVM_ReorganizeRecords(NVMManager* manager) {
     }
     //Überschreibe den originalen NVM_Speicher mit dem überarbeitetem/reorganisiertem Speicher
     for (i = 0; i < NVM_SIZE; i++) {
-        manager->nvm_data[i] = tempNVM[i];
+        manager->nvmData[i] = tempNVM[i];
     }
 
     updateAllocTable(manager);
