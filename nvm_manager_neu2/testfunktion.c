@@ -67,10 +67,19 @@ int testfunktion() {
 
 	for (int i = 0; i < 11; i++)
 	{
-		NVM_Handler(&manager, i, data4, &record4, 0);
+		NVM_AsyncReadRecord(&manager, i, &data2, &record2, 0);
+		NVM_AsyncWriteRecord(&manager, i, &data2, &record2, 0);
 		int breakpoint2 = 0;
-
 	}
+
+	for (int i = 0; i < 22; i++)
+	{
+		NVM_Handler(&manager, i, &data4, &record4,0);
+		int breakpoint2 = 0;
+	}
+
+
+
 
 	// Lösche Records
 	NVM_DeleteRecord(&manager, &record0);

@@ -46,8 +46,8 @@ typedef struct {
     int queueStart; // Startposition der Warteschlange
     int queueEnd; // Endposition der Warteschlange
     int queueCount; // Anzahl der Einträge in der Warteschlange
+    NVMRecordInfo queueRecords[ALLOC_TABLE_SIZE]; // Tabelle für Warteschlangeneinträge
     NVMWriteCallback writeCallbacks[QUEUE_SIZE];
-    int queueRecords[];
 } NVMManager;
 
 

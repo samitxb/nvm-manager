@@ -6,26 +6,56 @@
 #include "typedef.h"
 
 
+// Liest einen async-Record in der Schreibeschlange
 int NVM_AsyncWriteRecord(NVMManager* manager, int id, unsigned char* data, NVMRecord* record, NVMWriteCallback callback) {
+
 
     NVMRecordInfo* info = &manager->queue[id];
     NVMRecordInfo* infoAlloc = &manager->allocTable[id];
+    NVMRecordInfo* queueRecord = &manager->queueRecords[id];
 
     // Erstelle einen neuen Record
-   // record = (NVMRecord*)malloc(sizeof(NVMRecordHeader));
+    record = (NVMRecord*)malloc(sizeof(NVMRecordHeader));
     if (record == NULL) {
         callback(-1);  // Rufe den callback mit einem Fehlercode auf
         return -1;
     }
 
+    int break7 = 0;
+
+    // QueueStart = 1?
     manager->queue[manager->queueStart] = id; //  ID von Schreiboperation
     manager->queueStart = (manager->queueStart + 1) % QUEUE_SIZE;
     manager->queueCount++;
     printf("\nWrite Queue Count:  %d mit ID: ", manager->queueCount);
 
+
+    queueRecord->id = id;
+    queueRecord->length = infoAlloc->length;
+    queueRecord->readonly = infoAlloc->readonly;
+    queueRecord->readonlyFirst = infoAlloc->readonlyFirst;
+    queueRecord->redundancyStart = infoAlloc->redundancyStart;
+    queueRecord->redundant = infoAlloc->redundant;
+    queueRecord->start = infoAlloc->start;
+    queueRecord->used = infoAlloc->used;
+    queueRecord->valid = infoAlloc->valid;
+    queueRecord->checksum = infoAlloc->checksum;
+
+    /*
+    NVMRecord queueRecords =
+    {
+    .header.id = id,
+    .header.length = infoAlloc->length,
+    .checksum = infoAlloc->checksum,
+    };
+    */
+
+   
+
+    int breaksss = 0;
+
     return 0;
 }
-
 
 // Liest einen async-Record in der Warteschlange
 int NVM_AsyncReadRecord(NVMManager* manager, int id, unsigned char* data, NVMRecord* record, NVMWriteCallback callback) {
@@ -45,7 +75,8 @@ int NVM_AsyncReadRecord(NVMManager* manager, int id, unsigned char* data, NVMRec
         return -1;
     }
 
-    //Überprüfung ob NVM SPeicher voll ?
+
+    // QueueStart = 1?
 
     // Record in Warteschlange einfügen
     manager->queue[manager->queueStart] = -id;     // Für Unterscheidung ob Write oder Read wird id auf -id gesetzt
@@ -60,41 +91,41 @@ int NVM_AsyncReadRecord(NVMManager* manager, int id, unsigned char* data, NVMRec
 
 
 
-int NVM_Handler(NVMManager* manager, int id, unsigned char* data, NVMRecord* record, NVMWriteCallback callback) {
-
+int NVM_Handler(NVMManager* manager, int id, NVMRecord* record, NVMWriteCallback callback) 
+{
     NVMRecordInfo* infoHeaderForQueue = &manager->allocTable[id];
-    NVMRecordInfo* infoNVMQueue = &record->data;
-    NVMRecordInfo* queuedRecord = &manager->queueRecords;
+    NVMRecordInfo* queueId = &manager->queue[id];
+    NVMRecordInfo* infoAlloc = &manager->allocTable[id];
+    NVMRecord* data = &manager->nvmData[id];
+    NVMRecord* queueIdForRecords = &manager->queue[infoHeaderForQueue->id];
 
-    int getID[ALLOC_TABLE_SIZE];
-    int infoID = id;
 
 
-    // Überprüfe, ob es sich um einen Lesebefehl handelt
-    if (id < 0 || id >= ALLOC_TABLE_SIZE || infoHeaderForQueue->used)
+    int break1 = 0;
+
+    //Mit memcpy aus AllocTable auslesen
+    NVMRecord getDataFromTable =
     {
-        infoHeaderForQueue = &manager->allocTable[id]; // die shaise geht blyat
+    .header.id = infoHeaderForQueue->id,
+    .header.length = infoHeaderForQueue->length,
+    .checksum = infoHeaderForQueue->checksum
+    };
 
-        int queueStartReset = &manager->queueStart;
-        //queueStartReset == 0;
-
+    int break2 = 0;
+    // Überprüfe, ob es sich um einen Lesebefehl handelt
+    if (queueIdForRecords->header.id < 1)
+    {
         // Überprüfe, ob der Record genutzt wird
         if (!infoHeaderForQueue->used) {
             printf("Record wird nicht genutzt\n");
             return -1;
         }
 
-        //Mit memcpy aus AllocTable auslesen
-        NVMRecord getDataFromTable =
-        {
-        .header.id = infoHeaderForQueue->id,
-        .header.length = infoHeaderForQueue->length,
-        .checksum = infoHeaderForQueue->checksum
-        };
 
+        // Lese Record aus
         memcpy(&getDataFromTable.data, data, infoHeaderForQueue->length);
 
-        int breaks = 0;
+        int break3 = 0;
 
         // NVMRecord* putRecordInQueue = &manager;
         //putRecordInQueue = memcpy(putRecordInQueue, &getDataFromTable, sizeof(10));
@@ -121,21 +152,23 @@ int NVM_Handler(NVMManager* manager, int id, unsigned char* data, NVMRecord* rec
                 printf("Checksummen sind unterschiedlich\n");
                 return -1;
             }
-        }
+        }   
+        int break4 = 0;
 
         // Verarbeite den gelesenen Record
         // Hier kann man z.B. eine Callback-Funktion aufrufen oder den Record weiterverarbeiten
         // ...
-        NVMWriteCallback* callback = manager->writeCallbacks[infoID];
+        return callback = 1;
+        manager->queueStart--;
+        manager->queueCount--;
+
+        int break5 = 0;
     }
 
     else
     {
 
-        NVMRecordInfo* info = &manager->queue[id];
-        NVMRecordInfo* infoAlloc = &manager->allocTable[id];
-        infoID = id;
-
+        int break6 = 0;
 
         // Erstelle einen neuen Record
         record = (NVMRecord*)malloc(sizeof(NVMRecordHeader));
@@ -145,32 +178,21 @@ int NVM_Handler(NVMManager* manager, int id, unsigned char* data, NVMRecord* rec
             return -1;
         }
 
-        // Es handelt sich um einen Schreibbefehl
-        NVMRecord* queuedRecord;
-        queuedRecord = &manager->queueRecords[infoID];
-
-        // Schreibe den Record
-        NVM_AsyncWriteRecord(manager, infoID, queuedRecord->data, queuedRecord, 0);
-
-        // Rufe den Schreib-Callback auf
-        NVMWriteCallback* callback = manager->writeCallbacks[0];
+        int break7 = 0;
 
 
 
-        if (record->data != NULL) {
-            // Perform async write to NVM
-            // ...
-            // Call callback function when write is complete
-            NVM_AsyncWriteRecord(&manager, id, &record, &record->header.length, 0, callback);
-            return callback;
+        int start = queueId->start;
+        for (int i = 0; i < queueIdForRecords->header.length; i++) {
+            manager->nvmData[start + i] = record->data[i];
         }
-        else {
-            // Perform async read from NVM
-            // ...
-            // Call callback function when read is complete
-            unsigned char* data = NVM_AsyncReadRecord(&manager, id, queuedRecord->data, &record, callback);
-            return callback;
-        }
+
+
+
+
+        manager->queueStart--;
+        manager->queueCount--;
+        return callback = 1;
 
     }
 }
@@ -185,7 +207,7 @@ int NVM_Handler(NVMManager* manager, int id, unsigned char* data, NVMRecord* rec
     record = (NVMRecord*)malloc(sizeof(NVMRecordHeader));
     if (record == NULL) {
       //  callback(-1);  // Rufe den callback mit einem Fehlercode auf
-        return -1;
+        return -1; 
     }
 
 
