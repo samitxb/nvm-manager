@@ -49,13 +49,13 @@ int NVM_demoapplikation() {
     NVM_SyncWriteRecord(&manager, &record);
     assert(id != -1);
 
-    // Teste das Löschen eines schreibgeschützten Records
-    ret = NVM_DeleteRecord(&manager, &record);
-    assert(ret == -1);
-
     // Teste das Überschreiben eines schreibgeschützen Records
     memcpy(record.data, data, sizeof(data));
     ret = NVM_SyncWriteRecord(&manager, &record);
+    assert(ret == -1);
+
+    // Teste das Löschen eines schreibgeschützten Records
+    ret = NVM_DeleteRecord(&manager, &record);
     assert(ret == -1);
 
     // Teste das Hinzufügen eines redundanten Records
