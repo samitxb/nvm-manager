@@ -94,10 +94,11 @@ int NVM_AsyncReadRecord(NVMManager* manager, int id, unsigned char* data, NVMRec
 int NVM_Handler(NVMManager* manager, int id, NVMRecord* record, NVMWriteCallback callback) 
 {
     NVMRecordInfo* infoHeaderForQueue = &manager->allocTable[id];
-    NVMRecordInfo* queueId = &manager->queue[id];
+    NVMRecordInfo* queueRecord = &manager->queueRecords[id];
     NVMRecordInfo* infoAlloc = &manager->allocTable[id];
-    NVMRecord* data = &manager->nvmData[id];
-    NVMRecord* queueIdForRecords = &manager->queue[infoHeaderForQueue->id];
+    NVMRecord* dataW = &manager->nvmData[id];
+    NVMRecordInfo* queueRecordId = &manager->queue[id];
+
 
 
 
@@ -111,9 +112,10 @@ int NVM_Handler(NVMManager* manager, int id, NVMRecord* record, NVMWriteCallback
     .checksum = infoHeaderForQueue->checksum
     };
 
+
     int break2 = 0;
     // Überprüfe, ob es sich um einen Lesebefehl handelt
-    if (queueIdForRecords->header.id < 1)
+    if (queueRecordId->id < 1)
     {
         // Überprüfe, ob der Record genutzt wird
         if (!infoHeaderForQueue->used) {
@@ -123,7 +125,7 @@ int NVM_Handler(NVMManager* manager, int id, NVMRecord* record, NVMWriteCallback
 
 
         // Lese Record aus
-        memcpy(&getDataFromTable.data, data, infoHeaderForQueue->length);
+        memcpy(&getDataFromTable.data, dataW, infoHeaderForQueue->length);
 
         int break3 = 0;
 
@@ -133,7 +135,7 @@ int NVM_Handler(NVMManager* manager, int id, NVMRecord* record, NVMWriteCallback
         // Lese den Record
         // NVM_AsyncReadRecord(&manager, infoID, getDataFromTable, queuedRecord, 0);
 
-
+        /*
         // Überprüfe die Checksumme
         if (record->checksum != NVM_CalculateChecksum(record->data, infoHeaderForQueue->length)) {
             printf("Checksumme stimmt nicht überein\n");
@@ -154,15 +156,36 @@ int NVM_Handler(NVMManager* manager, int id, NVMRecord* record, NVMWriteCallback
             }
         }   
         int break4 = 0;
-
+        */
         // Verarbeite den gelesenen Record
         // Hier kann man z.B. eine Callback-Funktion aufrufen oder den Record weiterverarbeiten
         // ...
-        return callback = 1;
-        manager->queueStart--;
-        manager->queueCount--;
+  
+
+
+        
+        for (int i = 0; i < manager->queueCount; i++)
+        {
+            if (queueRecord->id == manager->queue[i])
+            {
+                queueRecord->id = 0;
+                queueRecord->checksum = 0;
+                queueRecord->length = 0;
+                queueRecord->readonly = 0;
+                queueRecord->readonlyFirst = 0;
+                queueRecord->redundancyStart = 0;
+                queueRecord->redundant = 0;
+                queueRecord->start = 0;
+                queueRecord->valid = 0;
+                queueRecord->used = 0;
+                manager->queue[-i] = 0;
+            }
+        }
+        manager->queueStart = manager->queueStart--;
+        manager->queueCount = manager->queueCount--;
 
         int break5 = 0;
+        return callback = 1;
     }
 
     else
@@ -170,25 +193,25 @@ int NVM_Handler(NVMManager* manager, int id, NVMRecord* record, NVMWriteCallback
 
         int break6 = 0;
 
-        // Erstelle einen neuen Record
-        record = (NVMRecord*)malloc(sizeof(NVMRecordHeader));
-        if (record == NULL)
-        {
-            callback(-1); // Rufe den callback mit einem Fehlercode auf
-            return -1;
-        }
 
         int break7 = 0;
 
 
 
-        int start = queueId->start;
-        for (int i = 0; i < queueIdForRecords->header.length; i++) {
+        // Schreibe den Record im NVM-Speicher
+        int start = queueRecord->start;
+        for (int i = 0; i < queueRecord->length; i++) {
             manager->nvmData[start + i] = record->data[i];
         }
 
 
-
+        for (int i = 0; i < manager->queueCount; i++)
+        {
+            if (queueRecord->id == manager->queue[i])
+            {
+                manager->queue[i] = 0;
+            }
+        }
 
         manager->queueStart--;
         manager->queueCount--;
