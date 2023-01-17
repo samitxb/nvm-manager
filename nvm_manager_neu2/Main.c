@@ -21,9 +21,12 @@
 int main() {
 
 	testfunktion();
+	/*	int ret = NVM_demoapplikation();
+	return ret;*/
 
-	int ret = NVM_demoapplikation();
-	return ret;
+
+	return 0;
+
 
 }
 

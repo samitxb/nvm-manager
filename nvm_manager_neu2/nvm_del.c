@@ -7,8 +7,8 @@
 
 
 // Löschen eines Records
-int NVM_DeleteRecord(NVMManager* manager, int id) {
-
+int NVM_DeleteRecord(NVMManager* manager, NVMRecord* record) {
+    int id = record->header.id;
     NVMRecordInfo* info = &manager->allocTable[id];
     // Prüfe, ob der Record existiert und nicht schreibgeschützt ist
     if (id < 0 || id >= ALLOC_TABLE_SIZE || !info->used || info->readonly) {

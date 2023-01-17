@@ -15,7 +15,7 @@
 #include "nvm_reorganize.h"
 
 
-void testfunktion() {
+int testfunktion() {
 	printf("\033[0;37m");
 	// Initialisiere NVM Manager
 	NVMManager manager;
@@ -80,10 +80,10 @@ void testfunktion() {
 	NVM_ReorganizeRecords(&manager);*/
 
 	// Lösche Records
-	NVM_DeleteRecord(&manager, id0);
-	NVM_DeleteRecord(&manager, id1);
-	NVM_DeleteRecord(&manager, id2);
-	NVM_DeleteRecord(&manager, id3);
+	NVM_DeleteRecord(&manager, &record0);
+	NVM_DeleteRecord(&manager, &record1);
+	NVM_DeleteRecord(&manager, &record2);
+	NVM_DeleteRecord(&manager, &record3);
 
 
 
@@ -142,10 +142,6 @@ void testfunktion() {
 	//}
 	//assert(i == ALLOC_TABLE_SIZE - 1);
 
-	while (!_kbhit())
-	{
-		Sleep(1);
-	}
 
-
+	return 0;
 }
