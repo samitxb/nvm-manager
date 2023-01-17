@@ -24,7 +24,6 @@ void NVM_IntegrityCheck(NVMManager* manager) {
             printf("\e[0m\033[0; 37Fehler: Integritätsprüfung fehlgeschlagen bei Record mit ID %d\e[0m\n", i);
             continue;
         }
-
         // Record ist gültig
         info->valid = true;
     }
