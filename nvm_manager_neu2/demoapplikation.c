@@ -19,6 +19,9 @@ int NVM_demoapplikation() {
     unsigned char data[] = { 1, 2, 3, 4, 5 };
     NVMRecord record = { .header.length = sizeof(data) };
 
+    printf("\n\n\033[0;36m Start der Demoapplikation \n\033[0;37m");
+    printf("\033[0;37m");
+
     // Initialisiere den NVM-Manager
     ret = NVM_Init(&manager);
     assert(ret == 0);
@@ -37,7 +40,7 @@ int NVM_demoapplikation() {
     assert(ret == 0);
 
     // Teste das Löschen eines Records
-    ret = NVM_DeleteRecord(&manager, id);
+    ret = NVM_DeleteRecord(&manager, &record);
     assert(ret == 0);
 
     // Teste das Hinzufügen eines schreibgeschützten Records
@@ -47,7 +50,7 @@ int NVM_demoapplikation() {
     assert(id != -1);
 
     // Teste das Löschen eines schreibgeschützten Records
-    ret = NVM_DeleteRecord(&manager, id);
+    ret = NVM_DeleteRecord(&manager, &record);
     assert(ret == -1);
 
     // Teste das Überschreiben eines schreibgeschützen Records
@@ -62,7 +65,7 @@ int NVM_demoapplikation() {
     assert(id != -1);
 
     // Teste das Löschen eines redundanten Records
-    ret = NVM_DeleteRecord(&manager, id);
+    ret = NVM_DeleteRecord(&manager, &record);
     assert(ret == 0);
 
     // Teste das Reorganisieren der Records

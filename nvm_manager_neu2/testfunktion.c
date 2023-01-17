@@ -72,75 +72,11 @@ int testfunktion() {
 
 	}
 
-	/*	//Testsequenz für reorg funktion
-	printf("\n\n\033[0;36m Testsequenz für resizeAllocTable(): \n\033[0;37m");
-	NVM_DeleteRecord(&manager, id2);
-	NVM_ReorganizeRecords(&manager);
-	//int id5 = NVM_AddNewRecord(&manager, &record0, 0, 0);
-	NVM_ReorganizeRecords(&manager);*/
-
 	// Lösche Records
 	NVM_DeleteRecord(&manager, &record0);
 	NVM_DeleteRecord(&manager, &record1);
 	NVM_DeleteRecord(&manager, &record2);
 	NVM_DeleteRecord(&manager, &record3);
-
-
-
-
-	/*
-		// Initialisiere NVM Manager
-	//NVMManager manager;
-	//NVM_demoapplikation(&manager);
-
-	NVMManager manager;
-	NVMRecord record;
-	int id;
-	int i;
-	int ret;
-
-	// Initialisiere den NVM-Manager
-	ret = NVM_Init(&manager);
-	assert(ret == 0);
-
-	// Teste das Hinzufügen eines neuen Datensatzes
-	record.header.length = 2;
-	id = NVM_AddNewRecord(&manager, &record, false, false);
-	assert(id == 0);
-
-	// Teste das Löschen eines Datensatzes
-	ret = NVM_DeleteRecord(&manager, id);
-	assert(ret == 0);
-
-	// Teste das Hinzufügen eines schreibgeschützten Datensatzes
-	record.header.length = 2;
-	id = NVM_AddNewRecord(&manager, &record, true, false);
-
-	assert(id == 0);
-
-	// Teste das Löschen eines schreibgeschützten Datensatzes
-	ret = NVM_DeleteRecord(&manager, id);
-	assert(ret == 0);
-	printf("\n%d", ret);
-
-	// Teste das Hinzufügen eines redundanten Datensatzes
-	record.header.length = 3;
-	id = NVM_AddNewRecord(&manager, &record, false, true);
-	assert(id == 0);
-
-	// Teste das Löschen eines redundanten Datensatzes
-	ret = NVM_DeleteRecord(&manager, id);
-	assert(ret == 0);*/
-
-	// Teste das Hinzufügen von Datensätzen, bis kein Platz mehr im NVM-Speicher ist
-	//for (i = 0; i < ALLOC_TABLE_SIZE; i++) {
-	//    record.header.length = 10;
-	//    id = NVM_AddNewRecord(&manager, &record, false, false);
-	//    if (id == -1) {
-	//        break;
-	//    }
-	//}
-	//assert(i == ALLOC_TABLE_SIZE - 1);
 
 
 	return 0;
