@@ -25,8 +25,8 @@ int NVM_AsyncWriteRecord(NVMManager* manager, int id, unsigned char* data, NVMRe
     manager->queueSchreiben = (manager->queueSchreiben + 1) % QUEUE_SIZE;
     manager->queueCount++;
 
-    int break7 = 0;
-    if ((manager->queueSchreiben + 1) % QUEUE_SIZE != manager->queueLesen)
+
+    if (manager->queueSchreiben != manager->queueLesen)
     {
         queueRecord->id = id;
         queueRecord->length = infoAlloc->length;
@@ -62,10 +62,16 @@ int NVM_AsyncWriteRecord(NVMManager* manager, int id, unsigned char* data, NVMRe
 }
 
 // Liest einen async-Record in der Warteschlange
-int NVM_AsyncReadRecord(NVMManager* manager, int id, unsigned char* data, NVMRecord* record) {
+int NVM_AsyncReadRecord(NVMManager* manager, int id,  unsigned char* data, NVMRecord* record) {
+
+    int callback = 0;
 
     NVMRecordInfo* infoAlloc = &manager->allocTable[id];
     NVMRecordInfo* infoQueue = &manager->queue[id];
+    NVMRecordInfo* queueRecord = &manager->queueRecords[id];
+
+
+
 
     if (manager->queueCount == QUEUE_SIZE) {
         // Warteschlange ist voll
@@ -79,16 +85,22 @@ int NVM_AsyncReadRecord(NVMManager* manager, int id, unsigned char* data, NVMRec
         return -1;
     }
 
-    int callback = 0;
-    if (manager->queueSchreiben != manager->queueLesen)
+
+    if (manager->queueLesen != manager->queueSchreiben)
     {
+        //Lese Record aus NVM_Data & schreibe in record.data    
+        memcpy(record->data, &manager->nvmData[manager->allocTable[id].start], manager->allocTable[id].length);
         infoAlloc->id = manager->queue[manager->queueLesen];
         manager->queueLesen = (manager->queueLesen + 1) % QUEUE_SIZE;
+        return callback = 1;
     }
+
     else
     {
-        callback = -1;
+        return callback = -1;
     }
+
+
     return callback;
 
 
@@ -114,7 +126,7 @@ int NVM_Handler(NVMManager* manager, int id, NVMRecord* record)
     NVMRecordInfo* queueId = &manager->queue[id];
     NVMRecordInfo* queueRecord = &manager->queueRecords[id];
     NVMRecordInfo* infoAlloc = &manager->allocTable[id];
-    NVMRecord* nvmData = &manager->nvmData[id];
+    NVMRecord* nvmData = &manager->nvmData;
 
     int callback = 0;
 
@@ -152,10 +164,10 @@ int NVM_Handler(NVMManager* manager, int id, NVMRecord* record)
         {
             if (manager->queueRecords->id[&i] = manager->queueLesen)
             {
-
+                printf("Warteschlangenrecord mit Id %i ausgelesen!\n", id);
           //      NVM_SyncReadRecord(&manager, &queueRecord->id); // Lesezugriffsverletzung
 
-                printf("Warteschlangenrecord mit Id %i ausgelesen!\n", id);
+           
                 queueRecord->id = 0;
                 queueRecord->start = 0;
                 queueRecord->checksum = 0;
