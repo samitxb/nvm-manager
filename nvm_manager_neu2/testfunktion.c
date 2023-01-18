@@ -73,6 +73,9 @@ int testfunktion() {
 
 	NVM_Handler(&manager, 4, &record4);
 	NVM_Handler(&manager, 5, &record5);
+
+	NVM_Handler(&manager, 4, &record4);
+	NVM_Handler(&manager, 5, &record5);
 	
 	//NVM_Handler(&manager, 5, &record5);
 	//NVM_AsyncReadRecord(&manager, 5, &data5, &record5);
