@@ -82,7 +82,7 @@ int NVM_demoapplikation() {
     // Teste Handler
     ret = NVM_Handler(&manager, id, &record);
     assert(ret == 0);
-    printf("\033[0;32masynchrones Lesen: CHECK!\033[0;37m\n\n");
+    printf("\033[0;32mHandler: CHECK!\033[0;37m\n\n");
 
     // Teste das Löschen eines schreibgeschützten Records
     ret = NVM_DeleteRecord(&manager, &record);
@@ -104,7 +104,7 @@ int NVM_demoapplikation() {
     // Teste Handler
     ret = NVM_Handler(&manager, id, &record);
     assert(ret == 0);
-    printf("\033[0;32masynchrones Lesen: CHECK!\033[0;37m\n\n");
+    printf("\033[0;32mHandler: CHECK!\033[0;37m\n\n");
 
 
     // Teste das Reorganisieren der Records
@@ -112,10 +112,10 @@ int NVM_demoapplikation() {
     assert(ret == 0);
     printf("\033[0;32mReorganisieren der Records: CHECK!\033[0;37m\n\n");
 
-    // Teste asynchrones Lesen
+    // Teste Handler
     ret = NVM_Handler(&manager, id, &record);
     assert(ret == 0);
-    printf("\033[0;32masynchrones Lesen: CHECK!\033[0;37m\n\n");
+    printf("\033[0;32mHandler: CHECK!\033[0;37m\n\n");
 
     int braeak = 0;
     // Teste das Hinzufügen von Records, bis kein Platz mehr ist
