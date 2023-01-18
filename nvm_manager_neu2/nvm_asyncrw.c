@@ -53,19 +53,6 @@ int NVM_AsyncWriteRecord(NVMManager* manager, int id, unsigned char* data, NVMRe
 
     printf("\nWrite Queue Count:  %d mit ID: ", manager->queueCount);
 
-
-
-    
-
-    /*
-    NVMRecord queueRecords =
-    {
-    .header.id = id,
-    .header.length = infoAlloc->length,
-    .checksum = infoAlloc->checksum,
-    };
-    */
-
    
 
     int breaksss = 0;
@@ -114,7 +101,7 @@ int NVM_AsyncReadRecord(NVMManager* manager, int id, unsigned char* data, NVMRec
 
     //  int queueDiff = manager->queueEnd - manager->queueStart;
 
-    printf("\nRead Queue Count:   %d mit ID: \n", manager->queueEintrag);
+    printf("\nRead Queue Count:   %d mit ID: \n", manager->queueLesen);
     return 0;
 
 }
@@ -210,12 +197,6 @@ int NVM_Handler(NVMManager* manager, int id, NVMRecord* record)
                 printf("Warteschlangenrecord mit Id %i gelöscht!\n", id);
             }
         }
-
-
-       
-
-        int break5 = 0;
-        return callback = 1;
     }
     else
     {
@@ -239,6 +220,18 @@ int NVM_Handler(NVMManager* manager, int id, NVMRecord* record)
              manager->queue[i] = 0;
              manager->queueSchreiben--;
              manager->queueCount--;
+
+             queueRecord->id = id;
+             queueRecord->length = infoAlloc->length;
+             queueRecord->readonly = infoAlloc->readonly;
+             queueRecord->readonlyFirst = infoAlloc->readonlyFirst;
+             queueRecord->redundancyStart = infoAlloc->redundancyStart;
+             queueRecord->redundant = infoAlloc->redundant;
+             queueRecord->start = infoAlloc->start;
+             queueRecord->used = infoAlloc->used;
+             queueRecord->valid = infoAlloc->valid;
+             queueRecord->checksum = infoAlloc->checksum;
+
         
         }
 
