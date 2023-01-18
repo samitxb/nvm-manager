@@ -54,7 +54,8 @@ int NVM_AddNewRecord(NVMManager* manager, NVMRecord* record, bool readonly, bool
     if (redundant) {
         info->redundancyStart = start + length;
     }
-    info->valid = 1;
+    //Vorübergehend Valid 0
+    info->valid = 0;
     info->checksum = 0;
 
     //Setzt Speicherbereich auf FF (reservierung?) 

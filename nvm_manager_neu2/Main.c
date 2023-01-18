@@ -20,12 +20,12 @@
 
 int main() {
 
-	int tfk = testfunktion();
+	//int tfk = testfunktion();
 	int ret = NVM_demoapplikation();
 	
 
-	if (ret == tfk)return 0;
-	
+	//if (ret == tfk)return 0;
+	return 0;
 
 
 }

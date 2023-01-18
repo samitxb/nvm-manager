@@ -4,18 +4,13 @@
 #include <stdbool.h>
 
 #include "typedef.h"
-#include "resizeAllocTable.h"
-#include "updateAllocTable.h"
 
 int NVM_ReorganizeRecords(NVMManager* manager) {
     int i, j;
-
     // Erstelle temporäres NVM-Speicher-Array
     unsigned char tempNVM[NVM_SIZE];
     memset(tempNVM, 0, NVM_SIZE);
-
     int currentPos = 0;
-
     // Iteriere durch den AllocTable
     for (i = 0; i < ALLOC_TABLE_SIZE; i++) {
         // Überprüfe im AllocTable, ob der aktuelle Record verwendet wird

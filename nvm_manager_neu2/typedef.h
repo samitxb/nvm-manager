@@ -48,11 +48,3 @@ typedef struct {
     int queueSchreiben;  // Schreiboperation
     NVMRecordInfo queueRecords[ALLOC_TABLE_SIZE]; // Tabelle für Warteschlangeneinträge
 } NVMManager;
-
-
-typedef struct {
-    int id;
-    int start;
-    int length;
-} biggerAllocTable;
-

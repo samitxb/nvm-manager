@@ -72,6 +72,10 @@ int NVM_SyncWriteRecord(NVMManager* manager, NVMRecord* record) {
 int NVM_SyncReadRecord(NVMManager* manager, NVMRecord* record) {
     int id = record->header.id;
     NVMRecordInfo* info = &manager->allocTable[id];
+    if (info->valid == 0) {
+        printf("Record mit der ID: %d noch nicht beschrieben!\n", id);
+        return -1;
+    }
     // Prüfe, ob der Record existiert
     if (id < 0 || id >= ALLOC_TABLE_SIZE || !info->used) {
         printf("Ungültige ID oder Record existiert nicht\n");
