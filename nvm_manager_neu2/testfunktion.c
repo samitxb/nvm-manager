@@ -68,9 +68,6 @@ int testfunktion() {
 	NVM_AsyncWriteRecord(&manager, 4, &data4, &record4);
 	NVM_AsyncWriteRecord(&manager, 5, &data5, &record5);
 
-	NVM_Handler(&manager, 4, &record4);
-	NVM_Handler(&manager, 5, &record5);
-
 	NVM_AsyncReadRecord(&manager, 4, &data4, &record4);
 	NVM_AsyncReadRecord(&manager, 5, &data5, &record5);
 
@@ -81,21 +78,6 @@ int testfunktion() {
 	//NVM_AsyncReadRecord(&manager, 5, &data5, &record5);
 	//NVM_Handler(&manager, 5, &record5);
 
-
-	for (int i = 0; i < 6; i++)
-	{
-		NVM_AsyncReadRecord(&manager, i, &data2, &record2, 0);
-		NVM_AsyncWriteRecord(&manager, i, &data2, &record2, 0);
-		int breakpoint2 = 0;
-	}
-
-	// schreibt i = 2 in data 204
-
-	for (int j = 0; j < 22; j++)
-	{
-		NVM_Handler(&manager, j, &data5, &record5);
-		int breakpoint2 = 0;
-	}
 
 
 

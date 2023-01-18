@@ -23,7 +23,6 @@ int NVM_AsyncWriteRecord(NVMManager* manager, int id, unsigned char* data, NVMRe
 
     manager->queue[manager->queueSchreiben] = id;
     manager->queueSchreiben = (manager->queueSchreiben + 1) % QUEUE_SIZE;
-    manager->queueCount++;
 
 
     if (manager->queueSchreiben != manager->queueLesen)
@@ -38,27 +37,10 @@ int NVM_AsyncWriteRecord(NVMManager* manager, int id, unsigned char* data, NVMRe
         queueRecord->used = infoAlloc->used;
         queueRecord->valid = infoAlloc->valid;
         queueRecord->checksum = infoAlloc->checksum;
-
-
-
-    }
-    else
-    {
-        callback = -1;
     }
 
 
     return callback;
-   
-
-
-    printf("\nWrite Queue Count:  %d mit ID: ", manager->queueCount);
-
-   
-
-    int breaksss = 0;
-
-    return 0;
 }
 
 // Liest einen async-Record in der Warteschlange
@@ -73,50 +55,29 @@ int NVM_AsyncReadRecord(NVMManager* manager, int id,  unsigned char* data, NVMRe
 
 
 
-    if (manager->queueCount == QUEUE_SIZE) {
+    if (manager->queueLesen == QUEUE_SIZE) {
         // Warteschlange ist voll
         printf("\nWarteschlange ist voll!");
-        return -1;
+        callback -1;
     }
 
     // Prüfe, ob der Record existiert
     if (id < 0 || id >= ALLOC_TABLE_SIZE || !infoAlloc->used) {
         printf("\nUngueltige ID oder Record existiert nicht in AllocTable\n");
-        return -1;
+        callback -1;
     }
 
+    id = manager->queue[manager->queueLesen];     // Für Readoperation
+    manager->queueLesen = (manager->queueLesen + 1) % QUEUE_SIZE;
 
     if (manager->queueLesen != manager->queueSchreiben)
     {
         //Lese Record aus NVM_Data & schreibe in record.data    
         memcpy(record->data, &manager->nvmData[manager->allocTable[id].start], manager->allocTable[id].length);
         infoAlloc->id = manager->queue[manager->queueLesen];
-        manager->queueLesen = (manager->queueLesen + 1) % QUEUE_SIZE;
-        return callback = 1;
     }
-
-    else
-    {
-        return callback = -1;
-    }
-
 
     return callback;
-
-
-    // QueueStart = 1?
-
-
-    manager->queue[manager->queueLesen] = id;     // Für Readoperation
-    manager->queueLesen = (manager->queueLesen + 1) % QUEUE_SIZE;
-    manager->queueCount++;
-
-
-    //  int queueDiff = manager->queueEnd - manager->queueStart;
-
-    printf("\nRead Queue Count:   %d mit ID: \n", manager->queueLesen);
-    return 0;
-
 }
 
 
@@ -147,12 +108,11 @@ int NVM_Handler(NVMManager* manager, int id, NVMRecord* record)
         // Überprüfe, ob der Record genutzt wird
         if (!infoAlloc->used) {
             printf("Record wird nicht genutzt\n");
-            return -1;
+            callback -1;
         }
         // Lese Record aus
         memcpy(&getDataFromTable.data, &manager->nvmData[infoAlloc->start], infoAlloc->length);
 
-        int break3 = 0;
 
         queueRecord->id = 0;
         queueRecord->start = 0;
@@ -166,52 +126,22 @@ int NVM_Handler(NVMManager* manager, int id, NVMRecord* record)
         queueRecord->valid = 0;
         queueRecord->used = 0;
 
-        for (int i = 0; i <= manager->queueCount; i++) {
+        for (int i = 0; i <= manager->queueLesen; i++) {
 
             if (manager->queue[i] == id) {
                 manager->queue[i] = 0;
                 manager->queueLesen--;
-                manager->queueCount--;
             }
         }
-
-
-        /*
-        for (int i = 0; i < manager->queueLesen; i++)
-        {
-            if (manager->queueRecords->id[&i] = manager->queueLesen)
-            {
-                printf("Warteschlangenrecord mit Id %i ausgelesen!\n", id);
-          //      NVM_SyncReadRecord(&manager, &queueRecord->id); // Lesezugriffsverletzung
-
-                queueRecord->id = 0;
-                queueRecord->start = 0;
-                queueRecord->checksum = 0;
-                queueRecord->length = 0;
-                queueRecord->readonly = 0;
-                queueRecord->readonlyFirst = 0;
-                queueRecord->redundancyStart = 0;
-                queueRecord->redundant = 0;
-                queueRecord->start = 0;
-                queueRecord->valid = 0;
-                queueRecord->used = 0;
-                printf("Warteschlangenrecord mit Id %i gelöscht!\n", id);
-
-
-                manager->queueLesen--;
-
-            }
-        }*/
-
 
         printf("Gelesene Daten von Record %d:\n", id);
         for (int i = 0; i < infoAlloc->length; i++) {
             printf("%d ", getDataFromTable.data[i]);
         }
 
-    }
-    else
-    {
+         }
+        else
+        {
         // Schreibe den Record im NVM-Speicher
         int start = infoAlloc->start;
         for (int i = 0; i < infoAlloc->length; i++) {
@@ -220,19 +150,18 @@ int NVM_Handler(NVMManager* manager, int id, NVMRecord* record)
 
         printf("Record geschrieben mit der ID: %d\n", id);
         
-        for (int i = 0; i <= manager->queueCount; i++) {
+        for (int i = 0; i <= manager->queueSchreiben; i++) {
             
             if (manager->queue[i] == id) {
                 manager->queue[i] = 0;
                 manager->queueSchreiben--;
-                manager->queueCount--;
             }   
         }
 
 
-        return callback = 1;
+        return callback;
 
-    }
+        }
 }
 
 
