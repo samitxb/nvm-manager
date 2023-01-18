@@ -37,6 +37,7 @@ int NVM_AsyncWriteRecord(NVMManager* manager, int id, unsigned char* data, NVMRe
         queueRecord->used = infoAlloc->used;
         queueRecord->valid = infoAlloc->valid;
         queueRecord->checksum = infoAlloc->checksum;
+
     }
 
 
@@ -126,7 +127,7 @@ int NVM_Handler(NVMManager* manager, int id, NVMRecord* record)
         queueRecord->valid = 0;
         queueRecord->used = 0;
 
-        for (int i = 0; i <= manager->queueLesen; i++) {
+        for (int i = 0; i < manager->queueLesen; i++) {
 
             if (manager->queue[i] == id) {
                 manager->queue[i] = 0;
@@ -158,8 +159,8 @@ int NVM_Handler(NVMManager* manager, int id, NVMRecord* record)
             }   
         }
 
-
-        return callback;
+        int break21321 = 0;
+        return callback = 0;
 
         }
 }
