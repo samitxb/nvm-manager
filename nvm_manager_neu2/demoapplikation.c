@@ -33,6 +33,13 @@ int NVM_demoapplikation() {
     assert(id != -1);
     printf("\033[0;32mHinzufügen eines neuen Records: CHECK!\033[0;37m\n\n");
 
+    // Teste das synchrone lesen aus dem unbeschriebenen Record
+    id = NVM_AddNewRecord(&manager, &record, false, false);
+    ret = NVM_SyncReadRecord(&manager, &record);
+    assert(ret == -1);
+    printf("\033[0;32mlesen aus dem unbeschriebenen Record: CHECK!\033[0;37m\n\n");
+
+
     // Teste asynchrones Schreiben
     ret = NVM_AsyncWriteRecord(&manager, id, &data, &record, 0);
     assert(ret == 0);
