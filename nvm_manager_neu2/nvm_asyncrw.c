@@ -126,40 +126,57 @@ int NVM_Handler(NVMManager* manager, int id, NVMRecord* record)
     NVMRecordInfo* queueId = &manager->queue[id];
     NVMRecordInfo* queueRecord = &manager->queueRecords[id];
     NVMRecordInfo* infoAlloc = &manager->allocTable[id];
-    NVMRecord* nvmData = &manager->nvmData;
 
     int callback = 0;
 
 
 
-    //Mit memcpy aus AllocTable auslesen
-    NVMRecord getDataFromTable =
-    {
-    .header.id = infoAlloc->id,
-    .header.length = infoAlloc->length,
-    .checksum = infoAlloc->checksum
-    };
-
-
     int break2 = 0;
-
     // Überprüfe, ob es sich um einen Lesebefehl handelt
     if (manager->queueSchreiben == 0)
     {
+
+        // Record zwischenzeitlich erstellen
+        NVMRecord getDataFromTable =
+        {
+        .header.id = infoAlloc->id,
+        .header.length = infoAlloc->length,
+        .checksum = infoAlloc->checksum
+        };
+
         // Überprüfe, ob der Record genutzt wird
         if (!infoAlloc->used) {
             printf("Record wird nicht genutzt\n");
             return -1;
         }
-
-
         // Lese Record aus
-        memcpy(&getDataFromTable.data, nvmData, infoAlloc->length);
+        memcpy(&getDataFromTable.data, &manager->nvmData[infoAlloc->start], infoAlloc->length);
 
         int break3 = 0;
 
+        queueRecord->id = 0;
+        queueRecord->start = 0;
+        queueRecord->checksum = 0;
+        queueRecord->length = 0;
+        queueRecord->readonly = 0;
+        queueRecord->readonlyFirst = 0;
+        queueRecord->redundancyStart = 0;
+        queueRecord->redundant = 0;
+        queueRecord->start = 0;
+        queueRecord->valid = 0;
+        queueRecord->used = 0;
 
-        
+        for (int i = 0; i <= manager->queueCount; i++) {
+
+            if (manager->queue[i] == id) {
+                manager->queue[i] = 0;
+                manager->queueLesen--;
+                manager->queueCount--;
+            }
+        }
+
+
+        /*
         for (int i = 0; i < manager->queueLesen; i++)
         {
             if (manager->queueRecords->id[&i] = manager->queueLesen)
@@ -167,7 +184,6 @@ int NVM_Handler(NVMManager* manager, int id, NVMRecord* record)
                 printf("Warteschlangenrecord mit Id %i ausgelesen!\n", id);
           //      NVM_SyncReadRecord(&manager, &queueRecord->id); // Lesezugriffsverletzung
 
-           
                 queueRecord->id = 0;
                 queueRecord->start = 0;
                 queueRecord->checksum = 0;
@@ -185,23 +201,35 @@ int NVM_Handler(NVMManager* manager, int id, NVMRecord* record)
                 manager->queueLesen--;
 
             }
+        }*/
+
+
+        printf("Gelesene Daten von Record %d:\n", id);
+        for (int i = 0; i < infoAlloc->length; i++) {
+            printf("%d ", getDataFromTable.data[i]);
         }
+
     }
     else
     {
-
-        for (int i = 0; i = manager->queueCount; i++)
-        {
-             manager->queue[i] = 0;
-             manager->queueSchreiben--;
-             manager->queueCount--;
-
-
-          //   NVM_SyncWriteRecord(&manager, &queueRecord); Übergibt Daten nicht ordnungsgemäß
-        
+        // Schreibe den Record im NVM-Speicher
+        int start = infoAlloc->start;
+        for (int i = 0; i < infoAlloc->length; i++) {
+            manager->nvmData[start + i] = record->data[i];
         }
 
- 
+        printf("Record geschrieben mit der ID: %d\n", id);
+        
+        for (int i = 0; i <= manager->queueCount; i++) {
+            
+            if (manager->queue[i] == id) {
+                manager->queue[i] = 0;
+                manager->queueSchreiben--;
+                manager->queueCount--;
+            }   
+        }
+
+
         return callback = 1;
 
     }

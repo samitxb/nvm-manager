@@ -65,6 +65,23 @@ int testfunktion() {
 	int id4 = NVM_AddNewRecord(&manager, &record4, 0, 0);
 	int id5 = NVM_AddNewRecord(&manager, &record5, 0, 0);
 
+	NVM_AsyncWriteRecord(&manager, 4, &data4, &record4);
+	NVM_AsyncWriteRecord(&manager, 5, &data5, &record5);
+
+	NVM_Handler(&manager, 4, &record4);
+	NVM_Handler(&manager, 5, &record5);
+
+	NVM_AsyncReadRecord(&manager, 4, &data4, &record4);
+	NVM_AsyncReadRecord(&manager, 5, &data5, &record5);
+
+	NVM_Handler(&manager, 4, &record4);
+	NVM_Handler(&manager, 5, &record5);
+	
+	//NVM_Handler(&manager, 5, &record5);
+	//NVM_AsyncReadRecord(&manager, 5, &data5, &record5);
+	//NVM_Handler(&manager, 5, &record5);
+
+
 	for (int i = 0; i < 6; i++)
 	{
 		NVM_AsyncReadRecord(&manager, i, &data2, &record2, 0);
