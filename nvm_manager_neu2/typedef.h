@@ -36,18 +36,17 @@ typedef struct {
     unsigned char checksum;
 } NVMRecordInfo;
 
-typedef void (*NVMWriteCallback)(int status);
 
 // Struktur für den NVM-Manager
 typedef struct {
     NVMRecordInfo allocTable[ALLOC_TABLE_SIZE]; // Allokationstabelle
     unsigned char nvmData[NVM_SIZE]; // NVM-Speicher
     int queue[QUEUE_SIZE]; // Asynchrone Schreib-/Lesewarteschlange
-    int queueStart; // Startposition der Warteschlange
-    int queueEnd; // Endposition der Warteschlange
+    int queueEintrag; // Startposition der Warteschlange
     int queueCount; // Anzahl der Einträge in der Warteschlange
+    int queueLesen; // Leseoperation
+    int queueSchreiben;  // Schreiboperation
     NVMRecordInfo queueRecords[ALLOC_TABLE_SIZE]; // Tabelle für Warteschlangeneinträge
-    NVMWriteCallback writeCallbacks[QUEUE_SIZE];
 } NVMManager;
 
 

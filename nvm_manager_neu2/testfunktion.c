@@ -65,16 +65,18 @@ int testfunktion() {
 	int id4 = NVM_AddNewRecord(&manager, &record4, 0, 0);
 	int id5 = NVM_AddNewRecord(&manager, &record5, 0, 0);
 
-	for (int i = 0; i < 11; i++)
+	for (int i = 0; i < 6; i++)
 	{
 		NVM_AsyncReadRecord(&manager, i, &data2, &record2, 0);
 		NVM_AsyncWriteRecord(&manager, i, &data2, &record2, 0);
 		int breakpoint2 = 0;
 	}
 
-	for (int i = 0; i < 22; i++)
+	// schreibt i = 2 in data 204
+
+	for (int j = 0; j < 22; j++)
 	{
-		NVM_Handler(&manager, i, &data4, &record4,0);
+		NVM_Handler(&manager, j, &data4, &record4);
 		int breakpoint2 = 0;
 	}
 

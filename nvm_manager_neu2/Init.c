@@ -11,9 +11,10 @@ int NVM_Init(NVMManager* manager) {
 	memset(manager, 0, sizeof(NVMManager));
 
 	// Initialisiere die Warteschlange
-	manager->queueStart = 0;
-	manager->queueEnd = 0;
+	manager->queueEintrag = 0;
 	manager->queueCount = 0;
+	manager->queueLesen = 0;
+	manager->queueSchreiben = 0;
 
 
 	return 0;
