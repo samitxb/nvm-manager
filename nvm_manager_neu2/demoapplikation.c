@@ -55,7 +55,7 @@ int NVM_demoapplikation() {
     assert(ret == 0);
     printf("\033[0;32mschreiben in den Record durch SyncWriteRecord: CHECK!\033[0;37m\n\n");
 
-    // Teste das synchrone lesen aus dem Record
+    // Teste das synchrone lesen aus dem beschribenen Record
     ret = NVM_SyncReadRecord(&manager, &record);
     assert(ret == 0);
     printf("\033[0;32mlesen aus dem Record durch SyncReadRecord: CHECK!\033[0;37m\n\n");
