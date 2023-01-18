@@ -39,16 +39,16 @@ int NVM_demoapplikation() {
     assert(ret == -1);
     printf("\033[0;32mlesen aus dem unbeschriebenen Record: CHECK!\033[0;37m\n\n");
 
-
-    // Teste asynchrones Schreiben
-    ret = NVM_AsyncWriteRecord(&manager, id, data, &record, 0);
+    // Teste asynchrones Lesen
+    ret = NVM_AsyncReadRecord(&manager, id, &data, &record, 0);
     assert(ret == 0);
     printf("\033[0;32masynchrones Schreiben: CHECK!\033[0;37m\n\n");
 
-    // Teste asynchrones Lesen
-    ret = NVM_AsyncReadRecord(&manager, id, data, &record, 0);
+    // Teste asynchrones Schreiben
+    ret = NVM_AsyncWriteRecord(&manager, id, &data, &record, 0);
     assert(ret == 0);
-    printf("\033[0;32masynchrones Lesen: CHECK!\033[0;37m\n\n");
+    printf("\033[0;32masynchrones Schreiben: CHECK!\033[0;37m\n\n");
+
 
     // Teste das synchrone schreiben in den Record
     memcpy(record.data, data, sizeof(data));
@@ -60,6 +60,11 @@ int NVM_demoapplikation() {
     ret = NVM_SyncReadRecord(&manager, &record);
     assert(ret == 0);
     printf("\033[0;32mlesen aus dem Record durch SyncReadRecord: CHECK!\033[0;37m\n\n");
+
+    // Teste Handler
+    ret = NVM_Handler(&manager, id, &record);
+    assert(ret == 0);
+    printf("\033[0;32m Schreibt Record: CHECK!\033[0;37m\n\n");
 
     // Teste das Löschen eines Records
     ret = NVM_DeleteRecord(&manager, &record);
@@ -79,15 +84,16 @@ int NVM_demoapplikation() {
     assert(ret == -1);
     printf("\033[0;32mÜberschreiben eines schreibgeschützen Records nicht möglich: CHECK!\033[0;37m\n\n");
 
-    // Teste Handler
-    ret = NVM_Handler(&manager, id, &record);
-    assert(ret == 0);
-    printf("\033[0;32mHandler: CHECK!\033[0;37m\n\n");
-
     // Teste das Löschen eines schreibgeschützten Records
     ret = NVM_DeleteRecord(&manager, &record);
     assert(ret == -1);
     printf("\033[0;32mLöschen eines schreibgeschützten Records: CHECK!\033[0;37m\n\n");
+
+    // Teste Handler
+    ret = NVM_Handler(&manager, id, &record);
+    assert(ret == 0);
+    printf("\033[0;32mLest Record: CHECK!\033[0;37m\n\n");
+
 
     // Teste das Hinzufügen eines redundanten Records
     id = NVM_AddNewRecord(&manager, &record, false, true);
@@ -104,7 +110,7 @@ int NVM_demoapplikation() {
     // Teste Handler
     ret = NVM_Handler(&manager, id, &record);
     assert(ret == 0);
-    printf("\033[0;32mHandler: CHECK!\033[0;37m\n\n");
+    printf("\033[0;32mHandler kann Daten nicht lesen: CHECK!\033[0;37m\n\n");
 
 
     // Teste das Reorganisieren der Records
@@ -112,12 +118,6 @@ int NVM_demoapplikation() {
     assert(ret == 0);
     printf("\033[0;32mReorganisieren der Records: CHECK!\033[0;37m\n\n");
 
-    // Teste Handler
-    ret = NVM_Handler(&manager, id, &record);
-    assert(ret == 0);
-    printf("\033[0;32mHandler: CHECK!\033[0;37m\n\n");
-
-    int braeak = 0;
     // Teste das Hinzufügen von Records, bis kein Platz mehr ist
     int i;
     for (i = 0; i < ALLOC_TABLE_SIZE; i++) {
