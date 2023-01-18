@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 
+#include "nvm_syncrw.h"
 #include "typedef.h"
 
 
@@ -145,43 +146,15 @@ int NVM_Handler(NVMManager* manager, int id, NVMRecord* record)
 
         int break3 = 0;
 
-        // NVMRecord* putRecordInQueue = &manager;
-        //putRecordInQueue = memcpy(putRecordInQueue, &getDataFromTable, sizeof(10));
 
-        // Lese den Record
-        // NVM_AsyncReadRecord(&manager, infoID, getDataFromTable, queuedRecord, 0);
-
-        /*
-        // Überprüfe die Checksumme
-        if (record->checksum != NVM_CalculateChecksum(record->data, infoHeaderForQueue->length)) {
-            printf("Checksumme stimmt nicht überein\n");
-            return -1;
-        }
-
-        // Überprüfe, ob der Record redundant gespeichert ist
-        if (infoHeaderForQueue->redundant) {
-            NVMRecord* redundantRecord;
-            memcpy(&redundantRecord, &manager->nvmData, infoHeaderForQueue->length);
-
-
-            // Vergleiche Checksummen
-            if (&record->checksum != &redundantRecord->checksum) {
-
-                printf("Checksummen sind unterschiedlich\n");
-                return -1;
-            }
-        }   
-        int break4 = 0;
-        */
-        // Verarbeite den gelesenen Record
-        // Hier kann man z.B. eine Callback-Funktion aufrufen oder den Record weiterverarbeiten
-        // ...
-  
         
         for (int i = 0; i < manager->queueLesen; i++)
         {
             if (manager->queueRecords->id[&i] = manager->queueLesen)
             {
+
+          //      NVM_SyncReadRecord(&manager, &queueRecord->id); // Lesezugriffsverletzung
+
                 printf("Warteschlangenrecord mit Id %i ausgelesen!\n", id);
                 queueRecord->id = 0;
                 queueRecord->start = 0;
@@ -195,25 +168,15 @@ int NVM_Handler(NVMManager* manager, int id, NVMRecord* record)
                 queueRecord->valid = 0;
                 queueRecord->used = 0;
                 printf("Warteschlangenrecord mit Id %i gelöscht!\n", id);
+
+
+                manager->queueLesen--;
+
             }
         }
     }
     else
     {
-        printf("wadwwdadwadwdaw\n");
-        int break6 = 0;
-
-
-        int break7 = 0;
-
-
-
-        // Schreibe den Record im NVM-Speicher
-        int start = queueRecord->start;
-        for (int i = 0; i < queueRecord->length; i++) {
-            manager->nvmData[start + i] = &record->data[i];
-        }
-
 
         for (int i = 0; i = manager->queueCount; i++)
         {
@@ -221,17 +184,8 @@ int NVM_Handler(NVMManager* manager, int id, NVMRecord* record)
              manager->queueSchreiben--;
              manager->queueCount--;
 
-             queueRecord->id = id;
-             queueRecord->length = infoAlloc->length;
-             queueRecord->readonly = infoAlloc->readonly;
-             queueRecord->readonlyFirst = infoAlloc->readonlyFirst;
-             queueRecord->redundancyStart = infoAlloc->redundancyStart;
-             queueRecord->redundant = infoAlloc->redundant;
-             queueRecord->start = infoAlloc->start;
-             queueRecord->used = infoAlloc->used;
-             queueRecord->valid = infoAlloc->valid;
-             queueRecord->checksum = infoAlloc->checksum;
 
+          //   NVM_SyncWriteRecord(&manager, &queueRecord); Übergibt Daten nicht ordnungsgemäß
         
         }
 
@@ -240,6 +194,43 @@ int NVM_Handler(NVMManager* manager, int id, NVMRecord* record)
 
     }
 }
+
+
+// NVMRecord* putRecordInQueue = &manager;
+//putRecordInQueue = memcpy(putRecordInQueue, &getDataFromTable, sizeof(10));
+
+// Lese den Record
+// NVM_AsyncReadRecord(&manager, infoID, getDataFromTable, queuedRecord, 0);
+
+/*
+// Überprüfe die Checksumme
+if (record->checksum != NVM_CalculateChecksum(record->data, infoHeaderForQueue->length)) {
+    printf("Checksumme stimmt nicht überein\n");
+    return -1;
+}
+
+// Überprüfe, ob der Record redundant gespeichert ist
+if (infoHeaderForQueue->redundant) {
+    NVMRecord* redundantRecord;
+    memcpy(&redundantRecord, &manager->nvmData, infoHeaderForQueue->length);
+
+
+    // Vergleiche Checksummen
+    if (&record->checksum != &redundantRecord->checksum) {
+
+        printf("Checksummen sind unterschiedlich\n");
+        return -1;
+    }
+}
+int break4 = 0;
+*/
+// Verarbeite den gelesenen Record
+// Hier kann man z.B. eine Callback-Funktion aufrufen oder den Record weiterverarbeiten
+// ...
+
+
+
+
 
 
 /*int NVM_AsyncWriteRecord(NVMManager* manager, int id, unsigned char* data, NVMRecord* record, NVMWriteCallback callback) {

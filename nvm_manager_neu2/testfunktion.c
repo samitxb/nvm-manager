@@ -76,7 +76,7 @@ int testfunktion() {
 
 	for (int j = 0; j < 22; j++)
 	{
-		NVM_Handler(&manager, j, &data4, &record4);
+		NVM_Handler(&manager, j, &data5, &record5);
 		int breakpoint2 = 0;
 	}
 

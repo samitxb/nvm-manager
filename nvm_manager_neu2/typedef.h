@@ -41,7 +41,7 @@ typedef struct {
 typedef struct {
     NVMRecordInfo allocTable[ALLOC_TABLE_SIZE]; // Allokationstabelle
     unsigned char nvmData[NVM_SIZE]; // NVM-Speicher
-    int queue[QUEUE_SIZE]; // Asynchrone Schreib-/Lesewarteschlange
+    int queue[QUEUE_SIZE]; // Asynchrone Warteschlange
     int queueCount; // Anzahl der Einträge in der Warteschlange
     int queueLesen; // Leseoperation
     int queueSchreiben;  // Schreiboperation
