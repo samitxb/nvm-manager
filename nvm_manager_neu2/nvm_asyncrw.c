@@ -3,7 +3,6 @@
 #include <string.h>
 #include <stdbool.h>
 
-#include "nvm_reorganize.h"
 #include "typedef.h"
 
 
@@ -21,10 +20,11 @@ int NVM_AsyncWriteRecord(NVMManager* manager, int id, unsigned char* data, NVMRe
         return -1;
     }
 
+    // Zählt in der Warteschlange
     manager->queue[manager->queueCount] = id;
     manager->queueSchreiben = (manager->queueSchreiben + 1) % QUEUE_SIZE;
 
-
+    // Schreibt in die Warteschlangentabelle
     if (manager->queueSchreiben != manager->queueLesen)
     {
         queueRecord->id = id;
@@ -48,7 +48,6 @@ int NVM_AsyncReadRecord(NVMManager* manager, int id,  unsigned char* data, NVMRe
 
     int callback = 0;
 
-    //int id = record->header.id;
 
     NVMRecordInfo* infoAlloc = &manager->allocTable[id];
     NVMRecordInfo* infoQueue = &manager->queue[id];
@@ -68,6 +67,7 @@ int NVM_AsyncReadRecord(NVMManager* manager, int id,  unsigned char* data, NVMRe
     }
 
 
+    // Zählt in der Warteschlange
     manager->queue[manager->queueCount] = id;     // Für Readoperation
     manager->queueLesen = (manager->queueLesen + 1) % QUEUE_SIZE;
 
@@ -95,7 +95,7 @@ int NVM_Handler(NVMManager* manager, int id, NVMRecord* record)
     int callback = 0;
    
 
-  
+    // NVM_IntegrityCheck(&manager) 
 
     // Überprüfe, ob es sich um einen Lesebefehl handelt
     if (manager->queueSchreiben == 0)                   //Fehlerquelle: Bugs in Warteschlange
@@ -117,7 +117,7 @@ int NVM_Handler(NVMManager* manager, int id, NVMRecord* record)
         // Lese Record aus
         memcpy(&getDataFromTable.data, &manager->nvmData[infoAlloc->start], infoAlloc->length);
 
-
+        //Lösche Eintrag in Warteschlangentabelle
         queueRecord->id = 0;
         queueRecord->start = 0;
         queueRecord->checksum = 0;
@@ -130,6 +130,7 @@ int NVM_Handler(NVMManager* manager, int id, NVMRecord* record)
         queueRecord->valid = 0;
         queueRecord->used = 0;
 
+        // Wartenummer wird gelöscht
         for (int i = 0; i < manager->queueCount; i++) {
 
             if (manager->queue[i] == id) {
@@ -154,7 +155,8 @@ int NVM_Handler(NVMManager* manager, int id, NVMRecord* record)
         }
 
         printf("Record geschrieben mit der ID: %d\n", id);
-        
+
+        // Wartenummer wird gelöscht
         for (int i = 0; i <= manager->queueCount; i++) {
             
             if (manager->queue[i] == id) {
