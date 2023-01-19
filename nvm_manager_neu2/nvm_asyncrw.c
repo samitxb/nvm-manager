@@ -68,18 +68,15 @@ int NVM_AsyncReadRecord(NVMManager* manager, int id,  unsigned char* data, NVMRe
         callback -1;
     }
 
-    manager->queue[manager->queueCount] = id;     // Für Readoperation
-    manager->queueLesen = (manager->queueLesen + 1) % QUEUE_SIZE;
-    manager->queueCount++;
 
-
-    /*
     if (manager->queueLesen != manager->queueSchreiben)
     {
-        //Lese Record aus NVM_Data & schreibe in record.data    
-        memcpy(record->data, &manager->nvmData[infoAlloc->start], infoAlloc->length);
-        //infoAlloc->id = manager->queue[manager->queueLesen];
-    }*/
+        manager->queue[manager->queueCount] = id;     // Für Readoperation
+        manager->queueLesen = (manager->queueLesen + 1) % QUEUE_SIZE;
+        manager->queueCount++;
+        callback = 0;
+    }
+
 
     return callback;
 }
@@ -91,15 +88,13 @@ int NVM_Handler(NVMManager* manager, int id, NVMRecord* record)
     NVMRecordInfo* queueId = &manager->queue[id];
     NVMRecordInfo* queueRecord = &manager->queueRecords[id];
     NVMRecordInfo* infoAlloc = &manager->allocTable[id];
-
+    int callback = 0;
    
 
-
-
-    int callback = 0;
+  
 
     // Überprüfe, ob es sich um einen Lesebefehl handelt
-    if (manager->queueSchreiben == 0)                                   //Fehlerquelle: Deswegen Bugs in Warteschlange
+    if (manager->queueSchreiben == 0)                   //Fehlerquelle: Bugs in Warteschlange
     {
 
         // Record zwischenzeitlich erstellen

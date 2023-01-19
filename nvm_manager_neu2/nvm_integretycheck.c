@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 
+#include "nvm_syncrw.h"
 #include "typedef.h"
 
 

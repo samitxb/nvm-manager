@@ -110,7 +110,7 @@ int NVM_demoapplikation() {
     // Teste Handler
     ret = NVM_Handler(&manager, id, &record);
     assert(ret == 0);
-    printf("\033[0;32mHandler kann Daten nicht lesen: CHECK!\033[0;37m\n\n");
+    printf("\033[0;32mHandler findet Record nicht: CHECK!\033[0;37m\n\n");
 
 
     // Teste das Reorganisieren der Records
