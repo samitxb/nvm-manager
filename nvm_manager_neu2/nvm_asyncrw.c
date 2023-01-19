@@ -7,7 +7,7 @@
 #include "typedef.h"
 
 
-// Liest einen async-Record in der Schreibeschlange
+// Schreibt einen async-Record in der Schreibeschlange
 int NVM_AsyncWriteRecord(NVMManager* manager, int id, unsigned char* data, NVMRecord* record) {
 
     NVMRecordInfo* infoAlloc = &manager->allocTable[id];
