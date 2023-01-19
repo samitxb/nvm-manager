@@ -54,15 +54,15 @@ int NVM_AddNewRecord(NVMManager* manager, NVMRecord* record, bool readonly, bool
     if (redundant) {
         info->redundancyStart = start + length;
     }
-    //Vorübergehend Valid 0
+    // Valid und Checksum auf 0
     info->valid = 0;
     info->checksum = 0;
 
-    //Setzt Speicherbereich auf FF (reservierung?) 
+    // Reserviert Speicherbereich
     for (int i = start; i < start + length; i++) {
         manager->nvmData[i] = 0xff;
     }
-    //Setzt Speicherbereich auf FF (reservierung?) falls redundant
+    // Reserviert redundanten Speicherbereich falls redundant
     if (info->redundant) {
         for (int i = start; i < info->redundancyStart + length; i++) {
             manager->nvmData[i] = 0xff;
@@ -71,6 +71,7 @@ int NVM_AddNewRecord(NVMManager* manager, NVMRecord* record, bool readonly, bool
 
     printf("Record mit der ID: %d erfolgreich erstellt!\n", id);
 
+    // Schreibe die id in den Record
     record->header.id = id;
     return id;
 }

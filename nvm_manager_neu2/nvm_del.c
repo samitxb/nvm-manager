@@ -25,6 +25,7 @@ int NVM_DeleteRecord(NVMManager* manager, NVMRecord* record) {
             manager->nvmData[i] = 0xff;
         }
     }
+    // Setzte Allokateblleneintrag auf 0
     info->used = 0;
     info->readonly = 0;
     info->redundant = 0;
