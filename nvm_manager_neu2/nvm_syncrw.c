@@ -72,6 +72,7 @@ int NVM_SyncWriteRecord(NVMManager* manager, NVMRecord* record) {
 int NVM_SyncReadRecord(NVMManager* manager, NVMRecord* record) {
     int id = record->header.id;
     NVMRecordInfo* info = &manager->allocTable[id];
+    // Prüfe, ob der Record gültig ist
     if (info->valid == 0) {
         printf("Record mit der ID: %d noch nicht beschrieben!\n", id);
         return -1;
@@ -82,17 +83,18 @@ int NVM_SyncReadRecord(NVMManager* manager, NVMRecord* record) {
         return -1;
     }
 
-    //Lese Record aus NVM_Data & schreibe in record.data
+    // Lese Record aus nvmData & schreibe in record.data
     memcpy(record->data, &manager->nvmData[info->start], info->length);
     unsigned char checksum1 = NVM_CalculateChecksum(record->data, info->length);
 
+    // Überprüfe Checksum
     if (checksum1 != info->checksum) {
         printf("Checksummen-Fehler\n");
         return -1;
     }
 
+    // Lese redundanten Record
     if (info->redundant) {
-        // Lese redundanten Record
         NVMRecord redundantRecord = {
             .header.id = 0,
             .header.length = 0
@@ -100,7 +102,7 @@ int NVM_SyncReadRecord(NVMManager* manager, NVMRecord* record) {
         memcpy(&redundantRecord.data, &manager->nvmData[info->redundancyStart], info->length);
 
         unsigned char checksum2 = NVM_CalculateChecksum(redundantRecord.data, info->length);
-        // Vergleiche Checksummen
+        // Vergleiche Checksum
         if (checksum1 != checksum2) {
             // Checksummen sind unterschiedlich
             printf("Checksummen im redundant gespeicherten Record unterschiedlich\n");
@@ -108,6 +110,7 @@ int NVM_SyncReadRecord(NVMManager* manager, NVMRecord* record) {
         }
     }
 
+    // Ausgabe der gelesenen Daten
     printf("Gelesene Daten von Record %d:\n", id);
     for (int i = 0; i < info->length; i++) {
         printf("%d ", record->data[i]);

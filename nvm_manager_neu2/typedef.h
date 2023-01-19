@@ -5,9 +5,9 @@
 #include <string.h>
 #include <stdbool.h>
 
-#define NVM_SIZE 1014 
-#define ALLOC_TABLE_SIZE 100
-#define QUEUE_SIZE 100
+#define NVM_SIZE 1014  // Speichergröße
+#define ALLOC_TABLE_SIZE 100 // Allokationstabellengröße
+#define QUEUE_SIZE 100 // Wartenschlangengröße
 
 // Struktur für den Header eines NVM-Records
 typedef struct {
@@ -19,7 +19,7 @@ typedef struct {
 typedef struct {
     NVMRecordHeader header; // Header des Records
     unsigned char checksum; // Checksumme des Records
-    unsigned char data[100];
+    unsigned char data[100]; // Daten des Records
 } NVMRecord;
 
 // Struktur für die Verwaltung von NVM Records+
@@ -33,7 +33,7 @@ typedef struct {
     bool redundant; // Flag, ob der Record redundant gespeichert wird
     int redundancyStart; // Startposition des Redundanzblocks
     bool valid; // Flag, ob der Record valide ist
-    unsigned char checksum;
+    unsigned char checksum; // Checksumme des Records
 } NVMRecordInfo;
 
 
