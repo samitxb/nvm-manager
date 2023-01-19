@@ -69,11 +69,6 @@ int NVM_AsyncReadRecord(NVMManager* manager, int id,  unsigned char* data, NVMRe
     }
 
 
-     manager->queue[manager->queueCount] = id;     // Für Readoperation
-     manager->queueLesen = (manager->queueLesen + 1) % QUEUE_SIZE;
-
-    /* Funktioniert in Testfunktion
-    * 
     if (manager->queueLesen != manager->queueSchreiben)
     {
         manager->queue[manager->queueCount] = id;     // Für Readoperation
@@ -81,7 +76,7 @@ int NVM_AsyncReadRecord(NVMManager* manager, int id,  unsigned char* data, NVMRe
         manager->queueCount++;
         callback = 0;
     }
-    */
+
 
     return callback;
 }
