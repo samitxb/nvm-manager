@@ -71,7 +71,8 @@ int NVM_AsyncReadRecord(NVMManager* manager, int id,  unsigned char* data, NVMRe
     manager->queue[manager->queueCount] = id;     // Für Readoperation
     manager->queueLesen = (manager->queueLesen + 1) % QUEUE_SIZE;
 
- /* 
+
+ /* Überprüffunktion fehlerhaft
     if (manager->queueLesen != manager->queueSchreiben)
     {
         manager->queue[manager->queueCount] = id;     // Für Readoperation
