@@ -40,12 +40,12 @@ int NVM_demoapplikation() {
     printf("\033[0;32mlesen aus dem unbeschriebenen Record: CHECK!\033[0;37m\n\n");
 
     // Teste asynchrones Lesen
-    ret = NVM_AsyncReadRecord(&manager, id, &data, &record, 0);
+    ret = NVM_AsyncReadRecord(&manager, id, &data, &record);
     assert(ret == 0);
     printf("\033[0;32masynchrones Schreiben: CHECK!\033[0;37m\n\n");
 
     // Teste asynchrones Schreiben
-    ret = NVM_AsyncWriteRecord(&manager, id, &data, &record, 0);
+    ret = NVM_AsyncWriteRecord(&manager, id, &data, &record);
     assert(ret == 0);
     printf("\033[0;32masynchrones Schreiben: CHECK!\033[0;37m\n\n");
 
@@ -128,10 +128,6 @@ int NVM_demoapplikation() {
     }
     assert(i == ALLOC_TABLE_SIZE-2);
     printf("\033[0;32mHinzufügen von Records, bis kein Platz mehr ist: CHECK!\033[0;37m\n\n");
-
-
-
-    //Teste Warteschlange voll
 
      return 0;
 }
